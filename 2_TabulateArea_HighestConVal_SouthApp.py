@@ -31,8 +31,8 @@ TabAreaMang_out = r"S:\Projects\NPCA\Data\Intermediate\GAP_Analysis_Species.gdb\
 print ("variables set")
 
 ## Tabulate Area of PADUS managers within all study areas
-#arcpy.sa.TabulateArea(SA_AnalysisLayer, "Mang_NS", SA_ConVal, "StudyArea", TabAreaMang_out, IUCN_CONUS, "CLASSES_AS_ROWS")
-#print ("tabulate area managed lands inside areas of highest conservation value in Southern App complete")
+arcpy.sa.TabulateArea(SA_AnalysisLayer, "Mang_NS", SA_ConVal, "StudyArea", TabAreaMang_out, IUCN_CONUS, "CLASSES_AS_ROWS")
+print ("tabulate area managed lands inside areas of highest conservation value in Southern App complete")
 
 ## Tabulate Area of PADUS GAP lands within all study areas
 arcpy.sa.TabulateArea(SA_AnalysisLayer, "GAP_Sts", SA_ConVal, "StudyArea", TabAreaGAP_out, IUCN_CONUS, "CLASSES_AS_ROWS")
