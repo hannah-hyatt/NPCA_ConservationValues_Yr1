@@ -72,5 +72,12 @@ env.workspace = tablepath
 listTable = arcpy.ListTables()
 Areas_merged = outTable
 arcpy.Merge_management(listTable, Areas_merged)
+
+# Add in the Red Cockaded Woodpecker - model from USGS
+woodpecker = r"S:\Projects\NPCA\Data\Source\Unzipped\DeepDives\BigThicket\RedCockeyedWoodpecker\bRCWOx_CONUS_HabMap_2001v1.tif"
+out_dbf = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\SpeciesSummaries\Int_ModelsTbls_BigThicket_v2\woodpecker.dbf"
+TabulateArea(Boundary, Boundary_field, woodpecker, "Value", out_dbf, woodpecker)
+print("woodpecker complete")
+
 print("Script complete")
 
