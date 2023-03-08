@@ -1,5 +1,5 @@
-# This script:
-# 1) Resamples the Connectivity/Climate Flow and Species Richnes Datasets to 30m to match the Resilient Sites Raster
+# This script: Second iteration of the national analysis performed on CONUS
+# 1) Resamples the Connectivity/Climate Flow and Range Size Rarity Datasets to 30m to match the Resilient Sites Raster
 # 2) Processes the Resilient Sites to be in the correct format to import to R for the quantile calculations.
 
 # Import system modules
@@ -18,10 +18,10 @@ print(now)
 ####################################
 
 ### Set Variables ###
-ResilientSites = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\resilient_sites_national\Resilience.gdb\Resilient_Sites_Terr_and_Coast_CONUS")
-ConnectivityClimateFlow = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\Connectivity_and_Climate_Flow_Raw\Connectivity_and_Climate_Flow_Raw.gdb\Climate_Flow_W2W")
-Richness = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\MoBI\SpeciesRichness_All.tif")
-outWS = r"S:\Projects\NPCA\Workspace\Ellie_Linden\1_DecileCalculationInputs"
+ResilientSites = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\resilient_sites_national\Resilience.gdb\Resilient_Sites_Terr_and_Coast_Alaska")
+ConnectivityClimateFlow = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\Connectivity_and_Climate_Flow_Raw\Connectivity_and_Climate_Flow_Raw.gdb\Climate_Flow_W2W_Alaska")
+RSR = arcpy.Raster(r"S:\Data\NatureServe\Species_Distributions\MoBI_HabitatModels\April2021\RSR_All.tif") #Update with RSR layer for AK
+outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\1_DecileCalculationInputs"
 
 ### Set Environments ###
 arcpy.env.overwriteOutput = True

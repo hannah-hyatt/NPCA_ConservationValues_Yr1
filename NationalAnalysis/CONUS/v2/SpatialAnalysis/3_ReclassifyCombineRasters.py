@@ -1,5 +1,5 @@
 # This script:
-# 1) Reclassifies the 3 input raster (Resilience, Connectivity/Flow, Richnessnes) by the quantile breaks calcualted in R
+# 1) Reclassifies the 3 input raster (Resilience, Connectivity/Flow, RSR) by the quantile breaks calcualted in R
 # 2) Combines the 3 reclassified input datasets into a single raster and sum the values to get the "Conservation Value"
 # 3) Use the lookup tool to create a raster with the official "Value" field as the summed  "Conservation Value"
 #    This step is needed to import to R/calculate CONUS-scale quantiles for the box plots.    
@@ -21,17 +21,17 @@ print(now)
 #####################
 
 ### Set Workspaces ###
-inWS = r"S:\Projects\NPCA\Workspace\Ellie_Linden\1_DecileCalculationInputs"
-outWS = r"S:\Projects\NPCA\Workspace\Ellie_Linden\3_Reclassified"
-outWS_combine = r"S:\Projects\NPCA\Workspace\Ellie_Linden\4_Combined"
+inWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs"
+outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\3_Reclassified"
+outWS_combine = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\4_Combined"
 
 ### Import 30m Rasters ###
-Richness = inWS + "\\Richness_30m.tif"
+RSR = inWS + "\\RSR_30m.tif"
 ConnectivityClimateFlow = inWS + "\\ConnectivityClimateFlow_30m.tif"
 ResilientSites = inWS + "\\ResilientSites_null.tif"
 
 ### Set Quantile Breaks ###
-Richness_remap = "0 0 1;1 1 2;2 2 3;3 3 4;4 32 5"
+RSR_remap = "0 0 1;1 1 2;2 2 3;3 3 4;4 32 5"
 ConnectivityClimateFlow_remap = "-3500 -906 1;-906 103 2;103 692 3;692 1226 4;1226 3500 5"
 ResilientSites_remap = "-4000 -913 1;-913 -178 2;-178 520 3;520 1199 4;1199 3500 5"
 
@@ -41,11 +41,11 @@ print("Variables/environments set.")
 ### Reclassify Rasters ###
 ##########################
 
-### Richness ###
-Richness_outRaster = outWS + "\\Richness_reclass.tif"
-Richness_reclass = arcpy.sa.Reclassify(Richness, "Value", Richness_remap, "DATA");
-Richness_reclass.save(Richness_outRaster)
-print("Richness reclassified.")
+### RSR ###
+RSR_outRaster = outWS + "\\RSR_reclass.tif"
+RSR_reclass = arcpy.sa.Reclassify(RSR, "Value", RSR_remap, "DATA");
+RSR_reclass.save(RSR_outRaster)
+print("RSR reclassified.")
 
 ### Connectivity & Flow ###
 ConnectivityClimateFlow_outRaster = outWS + "\\ConnectivityClimateFlow_reclass.tif"
@@ -65,13 +65,13 @@ print("Richness reclassified.")
 
 ### Combine Rasters ###
 Combine_outRaster = outWS_combine + "\\ConservationValues.tif"
-outCombine = Combine([Richness_outRaster, ConnectivityClimateFlow_outRaster, ResilientSites_outRaster])
+outCombine = Combine([RSR_outRaster, ConnectivityClimateFlow_outRaster, ResilientSites_outRaster])
 outCombine.save(Combine_outRaster)
 print("Rasters combined.")
 
 ### Sum Fields to Calculate "Conservation Value" ###
 arcpy.management.AddField(in_table=Combine_outRaster, field_name="ConVal", field_type="LONG", field_precision=None, field_scale=None, field_length=None, field_alias="", field_is_nullable="NULLABLE", field_is_required="NON_REQUIRED", field_domain="")
-arcpy.management.CalculateField(in_table=Combine_outRaster, field="ConVal", expression="!Richness_r! + !Connectivi! + !ResilientS!", expression_type="PYTHON3")
+arcpy.management.CalculateField(in_table=Combine_outRaster, field="ConVal", expression="!RSR_r! + !Connectivi! + !ResilientS!", expression_type="PYTHON3")
 print("Conservation Value calculated.")
 
 ################################################################################
