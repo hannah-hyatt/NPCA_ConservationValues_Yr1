@@ -33,12 +33,6 @@ inputTabAreaGAP$GAPstatus <- sub("\\(.*", "", inputTabAreaGAP$NPCA_Sps_Status)
 inputTabAreaGAP$GAPstatus_fin <- sub(".*GAP", "", inputTabAreaGAP$GAPstatus)
 inputTabAreaGAP$GAPstatus_fin <- gsub("(.*),.*", "\\1",inputTabAreaGAP$GAPstatus_fin)
 
-## join the area of each study area to the tab area input
-#inputTabAreaGAP <- merge(inputTabAreaGAP, cutecodes, by.x ="cutecode", by.y = "cutecode")
-
-## flag imperiled species
-#inputTabAreaGAP$Imperiled <- sub(inputTabAreaGAP$Rounded_GRank="G1", "G2", "Imperiled")
-
 ## load in unique lists
 lstSpecies <- unique(inputTabAreaGAP$Scientific_Name)
 #lstSpecies <- unique(inputTabAreaGAP[which(inputTabAreaGAP$Highlight_sps=="TRUE"),"Scientific_Name"])
@@ -62,7 +56,7 @@ for(i in 1:length(lstStudyAreas)){
   StudyAreaSpecies_subsetComb <- inputTabAreaGAP[0,]
   
   for(j in 1:length(lstSpecies_subset)){  #
-    print(paste("working on ", lstSpecies[j], sep=""))
+    print(paste("working on ", lstSpecies_subset[j], sep=""))
     StudyAreaSpecies_subset <- inputTabAreaGAP[which(inputTabAreaGAP$Scientific_Name==lstSpecies_subset[j]),]
     StudyAreaSpecies_subset[which(StudyAreaSpecies_subset$StudyArea!=lstStudyAreas[i]),"StudyArea"] <- NA
     
