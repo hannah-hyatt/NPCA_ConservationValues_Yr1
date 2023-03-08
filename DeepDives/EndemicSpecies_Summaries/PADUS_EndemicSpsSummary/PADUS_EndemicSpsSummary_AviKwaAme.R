@@ -44,7 +44,10 @@ for(i in 1:length(lstStudyAreas)){
   StudyArea_subset <- inputTabAreaGAP[which(inputTabAreaGAP$StudyArea==lstStudyAreas[i]),]
   
   ## Select all imperiled species
-  lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific"] )
+  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific"] )
+  
+  ## Select all species
+  lstSpecies_subset <- unique(StudyArea_subset$Scientific)
   
   ## Select a subset of the species - simplifies the bar chart output for presentation 
   #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific"] )

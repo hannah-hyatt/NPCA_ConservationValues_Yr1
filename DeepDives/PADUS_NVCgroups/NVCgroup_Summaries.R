@@ -82,7 +82,7 @@ for(i in 1:length(lstStudyAreas)){
       group_by(IVC_NAME) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>1),]
+    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>0),]
     
     StudyAreaGroup_subset3$axislable <- paste0(StudyAreaGroup_subset3$IVC_NAME, " (", StudyAreaGroup_subset3$G_RANK, ")") 
     StudyAreaGroup_subset3$GAPstatus <- paste0("GAP",StudyAreaGroup_subset3$GAPstatus)
@@ -168,7 +168,7 @@ for(i in 1:length(lstStudyAreas)){
       group_by(IVC_NAME) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>1),]
+    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>0),]
     
     StudyAreaGroup_subset3$axislable <- paste0(StudyAreaGroup_subset3$IVC_NAME, " (", StudyAreaGroup_subset3$G_RANK, ")") 
     StudyAreaGroup_subset3$Manager <- factor(StudyAreaGroup_subset3$Mang_Name, levels = c(lstManagers))
