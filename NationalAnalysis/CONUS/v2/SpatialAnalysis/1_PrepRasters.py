@@ -18,7 +18,7 @@ print(now)
 ####################################
 
 ### Set Variables ###
-ResilientSites = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\resilient_sites_national\Resilience.gdb\Resilient_Sites_Terr_and_Coast_CONUS")
+ResilientSites = arcpy.Raster(r"S:\Data\External\Evaluation\TNC_ResilientConnectedLandscapes\y2023_triballands\resilience_internal_2021_11\resilience_internal\Resilience_Internal.gdb\resilience_score")
 ConnectivityClimateFlow = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\Connectivity_and_Climate_Flow_Raw\Connectivity_and_Climate_Flow_Raw.gdb\Climate_Flow_W2W")
 RSR = arcpy.Raster(r"S:\Data\NatureServe\Species_Distributions\MoBI_HabitatModels\April2021\RSR_All.tif")
 outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs"
@@ -51,7 +51,7 @@ arcpy.RasterToOtherFormat_conversion(ResilientSites, outWS, "TIFF")
 
 # Execute Lookup
 ResilientSites_lookup = outWS + "\\ResilientSites_lookup.tif"
-lookupField = "Resilience"
+lookupField = "Value"
 outRaster_lookup = Lookup(ResilientSites, lookupField)
 outRaster_lookup.save(ResilientSites_lookup)
 print("ResilientSites Value field set to Resilience")

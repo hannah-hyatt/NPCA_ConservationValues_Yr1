@@ -38,42 +38,42 @@ thresholds<-c(0.2, 0.4, 0.6, 0.8)
 ##########################
 
 ### Checking Rasters ###
-# plot(ResilientSites) # got error when tried to do this (possibly because of the raster size)
-# plot(ConnectivityClimateFlow)
-# plot(RSR.990m)
+ plot(ResilientSites) # got error when tried to do this (possibly because of the raster size)
+ plot(ConnectivityClimateFlow)
+ plot(RSR.990m)
 
 ### Convert 120 value to NA in RSR Raster ###
-# summary(RSR.990m$RSR_All)
-# RSR.990m[RSR.990m==128] <- NA
-# summary(RSR.990m$RSR_All)
-# plot(RSR.990m)
+ summary(RSR.990m$RSR_All)
+ RSR.990m[RSR.990m==128] <- NA
+ summary(RSR.990m$RSR_All)
+ plot(RSR.990m)
 
 ###################################
 ### Calculate Percentile Breaks ###
 ###################################
-# ResilientSites.percentiles <-raster::quantile(ResilientSites, probs=thresholds, ncells=1000000)
-# print("Resilient Site percentiles calculated")
+ ResilientSites.percentiles <-raster::quantile(ResilientSites, probs=thresholds, ncells=1000000)
+ print("Resilient Site percentiles calculated")
 
-# ConnectivityClimateFlow.percentiles <-raster::quantile(ConnectivityClimateFlow, probs=thresholds, ncells=1000000)
-# print("Connectivity & Climate Flow percentiles calculated")
-# 
-# RSR.percentiles <-raster::quantile(RSR.990m, probs=thresholds, ncells=1000000)
-# print("RSR percentiles calculated")
+ ConnectivityClimateFlow.percentiles <-raster::quantile(ConnectivityClimateFlow, probs=thresholds, ncells=1000000)
+ print("Connectivity & Climate Flow percentiles calculated")
+ 
+ RSR.percentiles <-raster::quantile(RSR.990m, probs=thresholds, ncells=1000000)
+ print("RSR percentiles calculated")
 
 ####################################
 ### Convert to Dataframes/Export ###
 ####################################
 
 ### Resilient Sites ###
-# ResilientSites.percentiles.df <- as.data.frame(ResilientSites.percentiles)
-# write.csv(ResilientSites.percentiles.df, str_c(outWS, "ResilientSites_percentiles.csv"))
-# 
-# ### Connectivity & Climate Flow ###
-# ConnectivityClimateFlow.percentiles.df <- as.data.frame(ConnectivityClimateFlow.percentiles)
-# write.csv(ConnectivityClimateFlow.percentiles.df, str_c(outWS, "ConnectivityClimateFlow_percentiles.csv"))
-# 
-# ### RSR ###
-# RSR.percentiles.df <- as.data.frame(RSR.percentiles)
-# write.csv(RSR.percentiles.df, str_c(outWS, "RSR_percentiles.csv"))
+ ResilientSites.percentiles.df <- as.data.frame(ResilientSites.percentiles)
+ write.csv(ResilientSites.percentiles.df, str_c(outWS, "ResilientSites_percentiles.csv"))
+ 
+ ### Connectivity & Climate Flow ###
+ ConnectivityClimateFlow.percentiles.df <- as.data.frame(ConnectivityClimateFlow.percentiles)
+ write.csv(ConnectivityClimateFlow.percentiles.df, str_c(outWS, "ConnectivityClimateFlow_percentiles.csv"))
+ 
+ ### RSR ###
+ RSR.percentiles.df <- as.data.frame(RSR.percentiles)
+ write.csv(RSR.percentiles.df, str_c(outWS, "RSR_percentiles.csv"))
 
 print("Script complete")

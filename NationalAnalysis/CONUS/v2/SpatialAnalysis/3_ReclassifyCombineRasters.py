@@ -31,9 +31,9 @@ ConnectivityClimateFlow = inWS + "\\ConnectivityClimateFlow_30m.tif"
 ResilientSites = inWS + "\\ResilientSites_null.tif"
 
 ### Set Quantile Breaks ###
-RSR_remap = "0 0 1;1 1 2;2 2 3;3 3 4;4 32 5"
-ConnectivityClimateFlow_remap = "-3500 -906 1;-906 103 2;103 692 3;692 1226 4;1226 3500 5"
-ResilientSites_remap = "-4000 -913 1;-913 -178 2;-178 520 3;520 1199 4;1199 3500 5"
+RSR_remap = "0 0 1;0 0.000000278 2;0.000000278 0.0000044 3;0.0000044 0.000068 4;0.000068 1.54 5"
+ConnectivityClimateFlow_remap = "-3500 -904 1;-904 104 2;104 692 3;692 1226 4;1226 3500 5"
+ResilientSites_remap = "-4000 -890 1;-890 -165 2;-165 520 3;520 1208 4;1208 3500 5"
 
 print("Variables/environments set.")
 
@@ -71,7 +71,7 @@ print("Rasters combined.")
 
 ### Sum Fields to Calculate "Conservation Value" ###
 arcpy.management.AddField(in_table=Combine_outRaster, field_name="ConVal", field_type="LONG", field_precision=None, field_scale=None, field_length=None, field_alias="", field_is_nullable="NULLABLE", field_is_required="NON_REQUIRED", field_domain="")
-arcpy.management.CalculateField(in_table=Combine_outRaster, field="ConVal", expression="!RSR_r! + !Connectivi! + !ResilientS!", expression_type="PYTHON3")
+arcpy.management.CalculateField(in_table=Combine_outRaster, field="ConVal", expression="!RSR_reclas! + !Connectivi! + !ResilientS!", expression_type="PYTHON3")
 print("Conservation Value calculated.")
 
 ################################################################################
