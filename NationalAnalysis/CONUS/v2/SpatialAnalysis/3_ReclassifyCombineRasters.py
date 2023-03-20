@@ -31,7 +31,7 @@ ConnectivityClimateFlow = inWS + "\\ConnectivityClimateFlow_30m.tif"
 ResilientSites = inWS + "\\ResilientSites_null.tif"
 
 ### Set Quantile Breaks ###
-RSR_remap = "0 0 1;0 0.000000278 2;0.000000278 0.0000044 3;0.0000044 0.000068 4;0.000068 1.54 5"
+RSR_remap = "0 0 1;0 0.000001 2;0.000001 0.0000044 3;0.0000044 0.000068 4;0.000068 1.54 5"
 ConnectivityClimateFlow_remap = "-3500 -904 1;-904 104 2;104 692 3;692 1226 4;1226 3500 5"
 ResilientSites_remap = "-4000 -890 1;-890 -165 2;-165 520 3;520 1208 4;1208 3500 5"
 
@@ -57,14 +57,14 @@ print("Connectivity Climate Flow reclassified.")
 ResilientSites_outRaster = outWS + "\\ResilientSites_reclass.tif"
 ResilientSites_reclass = arcpy.sa.Reclassify(ResilientSites, "Value", ResilientSites_remap, "DATA");
 ResilientSites_reclass.save(ResilientSites_outRaster)
-print("Richness reclassified.")
+print("Resilience reclassified.")
 
 ####################################
 ### Combine Reclassified Rasters ###
 ####################################
 
 ### Combine Rasters ###
-Combine_outRaster = outWS_combine + "\\ConservationValues.tif"
+Combine_outRaster = outWS_combine + "\\ConservationValues_v2.tif"
 outCombine = Combine([RSR_outRaster, ConnectivityClimateFlow_outRaster, ResilientSites_outRaster])
 outCombine.save(Combine_outRaster)
 print("Rasters combined.")

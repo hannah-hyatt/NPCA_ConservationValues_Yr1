@@ -9,17 +9,19 @@ from datetime import datetime
 arcpy.CheckOutExtension('Spatial')
 
 # Set Input Variables/Workspaces
-ConservationValues = r"S:\Projects\NPCA\Workspace\Ellie_Linden\4_Combined\ConservationValues_lookup.tif"
-ResilientSites = r"S:\Projects\NPCA\Workspace\Ellie_Linden\1_DecileCalculationInputs\ResilientSites_null.tif"
-ConnectivityClimateFlow = r"S:\Projects\NPCA\Workspace\Ellie_Linden\1_DecileCalculationInputs\ConnectivityClimateFlow_30m.tif"
-Richness = r"S:\Projects\NPCA\Workspace\Ellie_Linden\1_DecileCalculationInputs\Richness_30m.tif"
-outWS_extracted = r"S:\Projects\NPCA\Workspace\Ellie_Linden\DensityPlotPrep\1_MaskingForConsistentExtents"
-outWS_float = r"S:\Projects\NPCA\Workspace\Ellie_Linden\DensityPlotPrep\2_FloatingPoint"
+ConservationValues = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\4_Combined\ConservationValues_lookup.tif"
+ResilientSites = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs\ResilientSites_null.tif"
+ConnectivityClimateFlow = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs\ConnectivityClimateFlow_30m.tif"
+RSR = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs\RSR_30m.tif"
+outWS_extracted = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\BoxPlots\1_MaskingForConsistentExtents"
+outWS_float = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\BoxPlots\2_FloatingPoint"
 
 ### Set Environments ###
 arcpy.env.overwriteOutput = True
 arcpy.env.snapRaster = ConservationValues
 arcpy.env.extent = ConservationValues
+
+print("Variables and environments set")
 
 ##########################################
 ### Extract rasters to the same extent ###
@@ -37,10 +39,10 @@ outExtractByMask_ConnectivityClimateFlow = ExtractByMask(ConnectivityClimateFlow
 outExtractByMask_ConnectivityClimateFlow.save(ConnectivityClimateFlow_extracted)
 print("Connectivity Climate Flow extracted")
 
-### Extract Richness ###
-Richness_extracted = outWS_extracted + "\\Richness_masked.tif"
-outExtractByMask_Richness = ExtractByMask(Richness, ConservationValues)
-outExtractByMask_Richness.save(Richness_extracted)
+### Extract RSR ###
+RSR_extracted = outWS_extracted + "\\RSR_masked.tif"
+outExtractByMask_RSR = ExtractByMask(RSR, ConservationValues)
+outExtractByMask_RSR.save(RSR_extracted)
 print("Richness extracted")
 
 #########################################
@@ -57,9 +59,9 @@ ConnectivityClimateFlow_float = outWS_float + "\\ConnectivityClimateFlow_float.t
 arcpy.management.CopyRaster(ConnectivityClimateFlow_extracted, ConnectivityClimateFlow_float, '', None, "-3.4e+38", "NONE", "NONE", "32_BIT_FLOAT", "NONE", "NONE", "TIFF", "NONE", "CURRENT_SLICE", "NO_TRANSPOSE")
 print("Connectivity Climate Flow converted to float")
 
-### Convert Richness to Float ###
-Richness_float = outWS_float + "\\Richness_float.tif"
-arcpy.management.CopyRaster(Richness_extracted, Richness_float, '', None, "-3.4e+38", "NONE", "NONE", "32_BIT_FLOAT", "NONE", "NONE", "TIFF", "NONE", "CURRENT_SLICE", "NO_TRANSPOSE")
+### Convert RSR to Float ###
+RSR_float = outWS_float + "\\RSR_float.tif"
+arcpy.management.CopyRaster(RSR_extracted, RSR_float, '', None, "-3.4e+38", "NONE", "NONE", "32_BIT_FLOAT", "NONE", "NONE", "TIFF", "NONE", "CURRENT_SLICE", "NO_TRANSPOSE")
 print("Richness converted to float")
 
 ### Convert Conservation Values to Float ###

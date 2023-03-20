@@ -8,7 +8,7 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_SAconval_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/DelawareRiverLandscapeDeepDive.gdb/TabArea_SAconval_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
@@ -35,7 +35,7 @@ StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom o
 StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = GAPstatus))+
   geom_rect()+
-  ggtitle("AviKwaAme") +
+  ggtitle("Delaware River Basin") +
   coord_polar(theta = "y")+ #makes plot circular
   scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"))+
   theme_void()+ #punches hole in donut
@@ -49,7 +49,7 @@ StudyArea_subset2 %>%
 ## Donut charts based on PADUS Management fields - simplified 
 
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_SAconval_ManagedLands"
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/DelawareRiverLandscapeDeepDive.gdb/TabArea_SAconval_ManagedLands"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -71,8 +71,8 @@ StudyArea_subset2 <- StudyArea_subset1 %>% #calculates the percentages
   group_by(StudyArea) %>%
   mutate(PercentArea =   (Area / sum(Area)*100) )
 
-StudyArea_subset2$Mang_NS <- factor(StudyArea_subset2$Mang_NS, levels=c('PVT','USFS','NPS','LOC','FED','DOE','DOD','NGO','BLM','FWS','TRIB','STAT','Unmanaged'))
-#StudyArea_subset2$Mang_NS <- fct_rev(StudyArea_subset2$Mang_NS) # reverses the order of the factor
+StudyArea_subset2$Mang_NS <- factor(StudyArea_subset2$Mang_NS, levels=c('Unmanaged','UNK','PVT','TRIB','STAT','LOC','FED','DOE','DOD','NGO','BLM','FWS','USFS','NPS'))
+StudyArea_subset2$Mang_NS <- fct_rev(StudyArea_subset2$Mang_NS) # reverses the order of the factor
 StudyArea_subset2 <- plyr::ddply(StudyArea_subset2, c('Mang_NS')) # sorts data frame in the same order as the factor levels
 
 StudyArea_subset2$ymax = cumsum(StudyArea_subset2$PercentArea) #sets top of rectangle for ggplot
@@ -81,7 +81,7 @@ StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom o
 StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = Mang_NS))+
   geom_rect()+
-  ggtitle("AviKwaAme") +
+  ggtitle("Delaware River Basin") +
   coord_polar(theta = "y")+ #makes plot circular
   #scale_y_reverse()+
   scale_fill_manual(values=c("Unmanaged" = "#B1B1B1",
@@ -99,5 +99,5 @@ StudyArea_subset2 %>%
                              "BLM" = "#a6cee3",
                              "FWS" = "#fdbf6f"))+
   theme_void()+ #punches hole in donut
-  theme(legend.position = "bottom", legend.title = element_blank(),plot.title.position = "plot")+
+  theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
   xlim(1,4) #sets width of donut

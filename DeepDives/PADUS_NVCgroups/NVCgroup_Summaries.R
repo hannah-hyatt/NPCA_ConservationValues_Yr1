@@ -26,7 +26,6 @@ inputRaster <- as.data.frame(inputRaster)
 inputTabAreaGAP$OBJECTID <- NULL
 inputTabAreaManaged$OBJECTID <- NULL
 
-
 ## split out study area
 inputTabAreaGAP$StudyArea <- "NA"
 inputTabAreaGAP$StudyArea <- gsub("\\(([^()]+)\\)", "\\1",str_extract(inputTabAreaGAP$NPCA_Status_GAP_StudyArea, "\\(([^()]+)\\)"))
@@ -104,7 +103,7 @@ for(i in 1:length(lstStudyAreas)){
       theme_minimal() +
       theme(panel.grid = element_blank(),
             legend.title=element_blank(),
-            legend.position = "bottom",
+            legend.position = "none",
             plot.title.position = "plot")
   }
 }
@@ -203,7 +202,7 @@ for(i in 1:length(lstStudyAreas)){
       theme(axis.title.y = element_blank(),
             panel.grid = element_blank(),
             legend.title=element_blank(),
-            legend.position = "bottom",
+            legend.position = "none",
             plot.title.position = "plot")
   }
 }    
