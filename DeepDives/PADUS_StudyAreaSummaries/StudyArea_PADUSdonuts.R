@@ -13,6 +13,11 @@ inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
+#inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_akaGAPsts_wNatMon"
+#inputTabAreaGAP <- arc.open(inputTabAreaGAP)
+#inputTabAreaGAP <- arc.select(inputTabAreaGAP)
+#inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
+
 inputTabAreaGAP$OBJECTID <- NULL
 
 ## replace NA for GAPstatus where the lands are unprotected
@@ -50,7 +55,6 @@ for(i in 1:length(lstStudyAreas)){
     xlim(1,4) #sets width of donut
   #facet_wrap(vars(), ncol=8) 
 }
-
 
 ##----------------------------------------------------------------------------------------------------------------------
 ## Donut charts based on PADUS Management fields - simplified 

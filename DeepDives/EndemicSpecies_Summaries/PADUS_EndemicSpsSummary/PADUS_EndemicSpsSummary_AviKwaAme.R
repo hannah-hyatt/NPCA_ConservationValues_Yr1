@@ -91,12 +91,12 @@ for(i in 1:length(lstStudyAreas)){
       geom_col() +
       coord_flip() +
       geom_abline(slope=0, intercept=0.0,  col = "white") +
-      ggtitle(paste(lstStudyAreas[i],"Study Area")) +
+      #ggtitle(paste(lstStudyAreas[i],"Study Area")) +
       ylab("Outside Study Area                                                             Inside Study Area") +
       scale_y_continuous(limits = c(-100, 100), breaks=c(-100,-75,-50,-25, 0, 25,50,75,100), labels=c("100%","75%","50%","25%", "0%", "25%","50%","75%","100%")) +
       scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"), guide = guide_legend(reverse = TRUE)) +
       theme_minimal() +
-      theme(panel.grid = element_blank(),legend.position = "bottom")
+      theme(panel.grid = element_blank(),legend.position = "none")
   }
 }
 # write out the dataframe behind this chart as a csv

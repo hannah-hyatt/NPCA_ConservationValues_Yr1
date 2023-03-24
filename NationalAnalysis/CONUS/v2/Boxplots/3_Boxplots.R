@@ -15,9 +15,9 @@ library(tidyverse)
 ######################
 ### Set Workspaces ###
 ######################
-CONUS.inWS <- "S:/Projects/NPCA/Workspace/Ellie_Linden/DensityPlotPrep/2_FloatingPoint/"
-FocalArea.inWS <- "S:/Projects/NPCA/Workspace/Ellie_Linden/DensityPlotPrep/3_Rasters_extracted_by_FocalAreas/"
-outWS <- "S:/Projects/NPCA/Workspace/Ellie_Linden/Boxplots/Boxplots_20230123/"
+CONUS.inWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/BoxPlots/2_FloatingPoint/"
+FocalArea.inWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/BoxPlots/3_Rasters_extracted_by_FocalAreas/"
+outWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/Boxplots/Boxplots_20230320/"
 
 ############################
 ### Import/Clean Rasters ###
@@ -45,17 +45,17 @@ for (CONUS.raster in CONUS.rasters){
 # The richness max value is stated here as 31 rather than 32; however, when calculating the max value across all focal area rasters below it did come to 32 (although this step is for CONUS, so not comparable). Not sure how much to be concerned about this.
 
 ### Check CONUS rasters ###
-# plot(CONUS.raster.list$Richness_float.tif$Richness_float)
-# summary(CONUS.raster.list$Richness_float.tif$Richness_float)
-# 
-# plot(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
-# summary(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
-# 
-# plot(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
-# summary(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
-# 
-# plot(CONUS.raster.list$Resilience_float.tif$Resilience_float)
-# summary(CONUS.raster.list$Resilience_float.tif$Resilience_float)
+ plot(CONUS.raster.list$RSR_float.tif$RSR_float)
+ summary(CONUS.raster.list$RSR_float.tif$RSR_float)
+ 
+ plot(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
+ summary(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
+ 
+ plot(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
+ summary(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
+ 
+ plot(CONUS.raster.list$Resilience_float.tif$Resilience_float)
+ summary(CONUS.raster.list$Resilience_float.tif$Resilience_float)
 
 # ------------------- #
 # --- Focal Areas --- #
@@ -83,7 +83,7 @@ for (FocalArea.raster in FocalArea.rasters){
 # ---------------------- #
 # --- CONUS Medians ---- #
 # ---------------------- #
-CONUS.Richness.median <- raster::boxplot(CONUS.raster.list$Richness_float.tif$Richness_float)$stats[3,]
+CONUS.RSR.median <- raster::boxplot(CONUS.raster.list$RSR_float.tif$RSR_float)$stats[3,]
 CONUS.Resilience.median <- raster::boxplot(CONUS.raster.list$Resilience_float.tif$Resilience_float)$stats[3,]
 CONUS.ConnectivityClimateFlow.median <- raster::boxplot(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)$stats[3,]
 CONUS.ConservationValues.median <- raster::boxplot(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)$stats[3,]
@@ -93,22 +93,22 @@ CONUS.ConservationValues.median <- raster::boxplot(CONUS.raster.list$Conservatio
 # ----------------------- #
 
 ### Min ###
-Richness.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_Richness.tif$AlabamaRiver_Richness)[[1]],
-                    summary(FocalArea.raster.list$AviKwaAme_Richness.tif$AviKwaAme_Richness)[[1]],
-                    summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[1]],
-                    summary(FocalArea.raster.list$Calumet_Richness.tif$Calumet_Richness)[[1]],
-                    summary(FocalArea.raster.list$CrownOfTheContinent_Richness.tif$CrownOfTheContinent_Richness)[[1]],
-                    summary(FocalArea.raster.list$DelawareRiverBasin_Richness.tif$DelawareRiverBasin_Richness)[[1]],
-                    summary(FocalArea.raster.list$Dinosaur_Richness.tif$Dinosaur_Richness)[[1]],
-                    summary(FocalArea.raster.list$GeorgiaRiverSystem_Richness.tif$GeorgiaRiverSystem_Richness)[[1]],
-                    summary(FocalArea.raster.list$GrandCanyonLandscape_Richness.tif$GrandCanyonLandscape_Richness)[[1]],
-                    summary(FocalArea.raster.list$GreaterEverglades_Richness.tif$GreaterEverglades_Richness)[[1]],
-                    summary(FocalArea.raster.list$GreaterYellowstone_Richness.tif$GreaterYellowstone_Richness)[[1]],
-                    summary(FocalArea.raster.list$Maines100MileWilderness_Richness.tif$Maines100MileWilderness_Richness)[[1]],
-                    summary(FocalArea.raster.list$NorthCascades_Richness.tif$NorthCascades_Richness)[[1]],
-                    summary(FocalArea.raster.list$RimOfTheValley_Richness.tif$RimOfTheValley_Richness)[[1]],
-                    summary(FocalArea.raster.list$SouthernAppalachian_Richness.tif$SouthernAppalachian_Richness)[[1]],
-                    summary(FocalArea.raster.list$TheLandsBetween_Richness.tif$TheLandsBetween_Richness)[[1]])
+RSR.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_RSR.tif$AlabamaRiver_RSR)[[1]],
+                    summary(FocalArea.raster.list$AviKwaAme_RSR.tif$AviKwaAme_RSR)[[1]],
+                    summary(FocalArea.raster.list$BigThicket_RSR.tif$BigThicket_RSR)[[1]],
+                    summary(FocalArea.raster.list$Calumet_RSR.tif$Calumet_RSR)[[1]],
+                    summary(FocalArea.raster.list$CrownOfTheContinent_RSR.tif$CrownOfTheContinent_RSR)[[1]],
+                    summary(FocalArea.raster.list$DelawareRiverBasin_RSR.tif$DelawareRiverBasin_RSR)[[1]],
+                    summary(FocalArea.raster.list$Dinosaur_RSR.tif$Dinosaur_RSR)[[1]],
+                    summary(FocalArea.raster.list$GeorgiaRiverSystem_RSR.tif$GeorgiaRiverSystem_RSR)[[1]],
+                    summary(FocalArea.raster.list$GrandCanyonLandscape_RSR.tif$GrandCanyonLandscape_RSR)[[1]],
+                    summary(FocalArea.raster.list$GreaterEverglades_RSR.tif$GreaterEverglades_RSR)[[1]],
+                    summary(FocalArea.raster.list$GreaterYellowstone_RSR.tif$GreaterYellowstone_RSR)[[1]],
+                    summary(FocalArea.raster.list$Maines100MileWilderness_RSR.tif$Maines100MileWilderness_RSR)[[1]],
+                    summary(FocalArea.raster.list$NorthCascades_RSR.tif$NorthCascades_RSR)[[1]],
+                    summary(FocalArea.raster.list$RimOfTheValley_RSR.tif$RimOfTheValley_RSR)[[1]],
+                    summary(FocalArea.raster.list$SouthernAppalachian_RSR.tif$SouthernAppalachian_RSR)[[1]],
+                    summary(FocalArea.raster.list$TheLandsBetween_RSR.tif$TheLandsBetween_RSR)[[1]])
 
 Resilience.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_Resilience.tif$AlabamaRiver_Resilience)[[1]],
                       summary(FocalArea.raster.list$AviKwaAme_Resilience.tif$AviKwaAme_Resilience)[[1]],
@@ -164,26 +164,26 @@ ConservationValues.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_Conserv
 
 
 ### Max ###
-Richness.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_Richness.tif$AlabamaRiver_Richness)[[5]],
-                    summary(FocalArea.raster.list$AviKwaAme_Richness.tif$AviKwaAme_Richness)[[5]],
-                    summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[5]],
-                    summary(FocalArea.raster.list$Calumet_Richness.tif$Calumet_Richness)[[5]],
-                    summary(FocalArea.raster.list$CrownOfTheContinent_Richness.tif$CrownOfTheContinent_Richness)[[5]],
-                    summary(FocalArea.raster.list$DelawareRiverBasin_Richness.tif$DelawareRiverBasin_Richness)[[5]],
-                    summary(FocalArea.raster.list$Dinosaur_Richness.tif$Dinosaur_Richness)[[5]],
-                    summary(FocalArea.raster.list$GeorgiaRiverSystem_Richness.tif$GeorgiaRiverSystem_Richness)[[5]],
-                    summary(FocalArea.raster.list$GrandCanyonLandscape_Richness.tif$GrandCanyonLandscape_Richness)[[5]],
-                    summary(FocalArea.raster.list$GreaterEverglades_Richness.tif$GreaterEverglades_Richness)[[5]],
-                    summary(FocalArea.raster.list$GreaterYellowstone_Richness.tif$GreaterYellowstone_Richness)[[5]],
-                    summary(FocalArea.raster.list$Maines100MileWilderness_Richness.tif$Maines100MileWilderness_Richness)[[5]],
-                    summary(FocalArea.raster.list$NorthCascades_Richness.tif$NorthCascades_Richness)[[5]],
-                    summary(FocalArea.raster.list$RimOfTheValley_Richness.tif$RimOfTheValley_Richness)[[5]],
-                    summary(FocalArea.raster.list$SouthernAppalachian_Richness.tif$SouthernAppalachian_Richness)[[5]],
-                    summary(FocalArea.raster.list$TheLandsBetween_Richness.tif$TheLandsBetween_Richness)[[5]])
+RSR.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_RSR.tif$AlabamaRiver_RSR)[[5]],
+                    summary(FocalArea.raster.list$AviKwaAme_RSR.tif$AviKwaAme_RSR)[[5]],
+                    summary(FocalArea.raster.list$BigThicket_RSR.tif$BigThicket_RSR)[[5]],
+                    summary(FocalArea.raster.list$Calumet_RSR.tif$Calumet_RSR)[[5]],
+                    summary(FocalArea.raster.list$CrownOfTheContinent_RSR.tif$CrownOfTheContinent_RSR)[[5]],
+                    summary(FocalArea.raster.list$DelawareRiverBasin_RSR.tif$DelawareRiverBasin_RSR)[[5]],
+                    summary(FocalArea.raster.list$Dinosaur_RSR.tif$Dinosaur_RSR)[[5]],
+                    summary(FocalArea.raster.list$GeorgiaRiverSystem_RSR.tif$GeorgiaRiverSystem_RSR)[[5]],
+                    summary(FocalArea.raster.list$GrandCanyonLandscape_RSR.tif$GrandCanyonLandscape_RSR)[[5]],
+                    summary(FocalArea.raster.list$GreaterEverglades_RSR.tif$GreaterEverglades_RSR)[[5]],
+                    summary(FocalArea.raster.list$GreaterYellowstone_RSR.tif$GreaterYellowstone_RSR)[[5]],
+                    summary(FocalArea.raster.list$Maines100MileWilderness_RSR.tif$Maines100MileWilderness_RSR)[[5]],
+                    summary(FocalArea.raster.list$NorthCascades_RSR.tif$NorthCascades_RSR)[[5]],
+                    summary(FocalArea.raster.list$RimOfTheValley_RSR.tif$RimOfTheValley_RSR)[[5]],
+                    summary(FocalArea.raster.list$SouthernAppalachian_RSR.tif$SouthernAppalachian_RSR)[[5]],
+                    summary(FocalArea.raster.list$TheLandsBetween_RSR.tif$TheLandsBetween_RSR)[[5]])
 
 Resilience.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_Resilience.tif$AlabamaRiver_Resilience)[[5]],
                       summary(FocalArea.raster.list$AviKwaAme_Resilience.tif$AviKwaAme_Resilience)[[5]],
-                      summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[5]],
+                      summary(FocalArea.raster.list$BigThicket_Resilience.tif$BigThicket_Resilience)[[5]],
                       summary(FocalArea.raster.list$Calumet_Resilience.tif$Calumet_Resilience)[[5]],
                       summary(FocalArea.raster.list$CrownOfTheContinent_Resilience.tif$CrownOfTheContinent_Resilience)[[5]],
                       summary(FocalArea.raster.list$DelawareRiverBasin_Resilience.tif$DelawareRiverBasin_Resilience)[[5]],
@@ -201,7 +201,7 @@ Resilience.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_Resilience.tif$
 
 ConnectivityClimateFlow.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_ConnectivityClimateFlow.tif$AlabamaRiver_ConnectivityClimateFlow)[[5]],
                                    summary(FocalArea.raster.list$AviKwaAme_ConnectivityClimateFlow.tif$AviKwaAme_ConnectivityClimateFlow)[[5]],
-                                   summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[5]],
+                                   summary(FocalArea.raster.list$BigThicket_ConnectivityClimateFlow.tif$BigThicket_ConnectivityClimateFlow)[[5]],
                                    summary(FocalArea.raster.list$Calumet_ConnectivityClimateFlow.tif$Calumet_ConnectivityClimateFlow)[[5]],
                                    summary(FocalArea.raster.list$CrownOfTheContinent_ConnectivityClimateFlow.tif$CrownOfTheContinent_ConnectivityClimateFlow)[[5]],
                                    summary(FocalArea.raster.list$DelawareRiverBasin_ConnectivityClimateFlow.tif$DelawareRiverBasin_ConnectivityClimateFlow)[[5]],
@@ -218,7 +218,7 @@ ConnectivityClimateFlow.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_Co
 
 ConservationValues.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_ConservationValues.tif$AlabamaRiver_ConservationValues)[[5]],
                               summary(FocalArea.raster.list$AviKwaAme_ConservationValues.tif$AviKwaAme_ConservationValues)[[5]],
-                              summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[5]],
+                              summary(FocalArea.raster.list$BigThicket_ConservationValues.tif$BigThicket_ConservationValues)[[5]],
                               summary(FocalArea.raster.list$Calumet_ConservationValues.tif$Calumet_ConservationValues)[[5]],
                               summary(FocalArea.raster.list$CrownOfTheContinent_ConservationValues.tif$CrownOfTheContinent_ConservationValues)[[5]],
                               summary(FocalArea.raster.list$DelawareRiverBasin_ConservationValues.tif$DelawareRiverBasin_ConservationValues)[[5]],
@@ -234,11 +234,11 @@ ConservationValues.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_Conserv
                               summary(FocalArea.raster.list$TheLandsBetween_ConservationValues.tif$TheLandsBetween_ConservationValues)[[5]])
 
 # Check min/max objects created above
-Richness.Min
+RSR.Min
 Resilience.Min
 ConnectivityClimateFlow.Min
 ConservationValues.Min
-Richness.Max
+RSR.Max
 Resilience.Max
 ConnectivityClimateFlow.Max
 ConservationValues.Max
@@ -257,10 +257,10 @@ for (i in FocalArea.raster.list){
   variable.name <- str_split_fixed(layer.name, pattern = "_", n=2)[2]
   
   # Set the min/max axis limts and CONUS median based on variables 
-  if (variable.name == "Richness") {
-    variable.min <- Richness.Min
-    variable.max <- Richness.Max
-    CONUS.median <- CONUS.Richness.median
+  if (variable.name == "RSR") {
+    variable.min <- RSR.Min
+    variable.max <- RSR.Max
+    CONUS.median <- CONUS.RSR.median
   } else if (variable.name == "Resilience") {
     variable.min <- Resilience.Min
     variable.max <- Resilience.Max
@@ -282,6 +282,7 @@ for (i in FocalArea.raster.list){
   # Create boxplot
   boxplot <- raster::boxplot(i,
                              ylim=c(variable.min, variable.max))
+  
   # Add CONUS medians
   abline(h=CONUS.median, col="blue", lwd=2, lty=2)
   dev.off()

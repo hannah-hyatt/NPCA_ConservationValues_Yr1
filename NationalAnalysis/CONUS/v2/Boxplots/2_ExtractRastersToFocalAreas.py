@@ -11,23 +11,24 @@ from datetime import datetime
 arcpy.CheckOutExtension('Spatial')
 
 ### Set Workspaces ###
-inWS_rasters = r"S:\Projects\NPCA\Workspace\Ellie_Linden\DensityPlotPrep\2_FloatingPoint"
-inWS_FocalAreas = r"S:\Projects\NPCA\Workspace\Ellie_Linden\StudyAreas\StudyAreas_split"
-outWS = r"S:\Projects\NPCA\Workspace\Ellie_Linden\DensityPlotPrep\3_Rasters_extracted_by_FocalAreas"
+inWS_rasters = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\BoxPlots\2_FloatingPoint"
+inWS_StudyAreas = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\StudyAreas_split"
+outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\BoxPlots\3_Rasters_extracted_by_FocalAreas"
 
 ### Set Environments ###
 arcpy.env.overwriteOutput = True
 arcpy.env.snapRaster = inWS_rasters + "\\ConservationValues_float.tif"
+print ("Workspaces and Environments set")
 
 ### List shapefiles ###
-arcpy.env.workspace = inWS_FocalAreas
-FocalAreas = arcpy.ListFeatureClasses()
+arcpy.env.workspace = inWS_StudyAreas
+StudyAreas = arcpy.ListFeatureClasses()
 
 ### Loop through Focal Area shapefiles to be used as mask ###
-for FocalArea in FocalAreas:
-    FocalArea_file = inWS_FocalAreas + "\\" + FocalArea
-    FocalArea_name = str(FocalArea)[:-4]
-    print(FocalArea_name)
+for StudyArea in StudyAreas:
+    StudyArea_file = inWS_StudyAreas + "\\" + StudyArea
+    StudyArea_name = str(StudyArea)[:-4]
+    print(StudyArea_name)
 
     ### List rasters ###
     arcpy.env.workspace = inWS_rasters
@@ -40,12 +41,12 @@ for FocalArea in FocalAreas:
         print(raster_name)
 
         # Extract raster variable to focal area
-        outExtractByMask = ExtractByMask(raster_file, FocalArea_file)
-        outRaster = outWS + "\\" + FocalArea_name + "_" + raster_name + ".tif"
+        outExtractByMask = ExtractByMask(raster_file, StudyArea_file)
+        outRaster = outWS + "\\" + StudyArea_name + "_" + raster_name + ".tif"
         outExtractByMask.save(outRaster)
 
     # Reset workspace to focal area shapefiles
-    arcpy.env.workspace = inWS_FocalAreas
+    arcpy.env.workspace = inWS_StudyAreas
 
 
 print ("Script Finished")
