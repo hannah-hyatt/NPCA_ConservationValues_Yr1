@@ -8,20 +8,20 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-#inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
-#inputTabAreaGAP <- arc.open(inputTabAreaGAP)
-#inputTabAreaGAP <- arc.select(inputTabAreaGAP)
-#inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
-
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
-#inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_ManagedLands"
-#inputTabAreaManaged <- arc.open(inputTabAreaManaged)
-#inputTabAreaManaged <- arc.select(inputTabAreaManaged)
-#inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
+# inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+# inputTabAreaGAP <- arc.open(inputTabAreaGAP)
+# inputTabAreaGAP <- arc.select(inputTabAreaGAP)
+# inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
+
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_ManagedLands"
+inputTabAreaManaged <- arc.open(inputTabAreaManaged)
+inputTabAreaManaged <- arc.select(inputTabAreaManaged)
+inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
 
 inputRaster <- "S:/Projects/NPCA/Data/Intermediate/NationalAnalysis.gdb/Landfire_EVT_2020_IVC_join_2023" #
 inputRaster <- arc.open(inputRaster)
