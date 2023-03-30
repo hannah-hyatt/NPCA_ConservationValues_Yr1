@@ -23,32 +23,44 @@ scratchWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\scratch"
 arcpy.env.overwriteOutput = True
 print("environments set")
 
+# create list to focus the following analysis on
+Spslist = []
+#Sps_file = open(r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\NPCA_AlaskaSGCNlist_fix_20230326.txt") #list of SGCNs
+Sps_file = open(r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\NPCA_AlaskaNOTsgcn_20230327.txt") #list of models that aren't SGCNs
+for word in Sps_file:
+    word = word.rstrip("\n")# this removes the spaces after each word
+    word = word + ".tif"
+    Spslist.append(word)
+print("Species list created")
+
 # Create raster list
 arcpy.env.workspace = inWS
 RasterList = arcpy.ListRasters("*","TIF")
+print("raster list created")
 
 # Loop through rasters to calculate area ratio and inverse area and create individual rsr outputs
 for raster in RasterList:
-    print ("working on " + raster)
-    inRaster = inWS + "\\" + raster
-    outRaster = rsrWS + "\\" + raster
-    
-    # Divide pixel count by 1000
-    area = "area"
-    expression = "(!COUNT!/1000)"
-    arcpy.management.CalculateField(inRaster, area, expression, "PYTHON3", '', "DOUBLE", "NO_ENFORCE_DOMAINS")
-    print("area calculated")
+    if raster in Spslist:
+        print ("working on " + raster)
+        inRaster = inWS + "\\" + raster
+        outRaster = rsrWS + "\\" + raster
+        
+        # Divide pixel count by 1000
+        area = "area"
+        expression = "(!COUNT!/1000)"
+        arcpy.management.CalculateField(inRaster, area, expression, "PYTHON3", '', "DOUBLE", "NO_ENFORCE_DOMAINS")
+        print("area calculated")
 
-    # Add/calculate inverse of area
-    inverse = "inverse"
-    expression = "(1/!area!)"
-    arcpy.management.CalculateField(inRaster, inverse, expression, "PYTHON3", '', "DOUBLE", "NO_ENFORCE_DOMAINS")
-    print("inverse calculated")
-    
-    # Create a lookup raster pointing to inverse value
-    rsr_raster = Lookup(inRaster, inverse)
-    rsr_raster.save(outRaster)
-    print("rsr raster created - " + raster + " complete")
+        # Add/calculate inverse of area
+        inverse = "inverse"
+        expression = "(1/!area!)"
+        arcpy.management.CalculateField(inRaster, inverse, expression, "PYTHON3", '', "DOUBLE", "NO_ENFORCE_DOMAINS")
+        print("inverse calculated")
+        
+        # Create a lookup raster pointing to inverse value
+        rsr_raster = Lookup(inRaster, inverse)
+        rsr_raster.save(outRaster)
+        print("rsr raster created - " + raster + " complete")
 
 print("Script complete")
 

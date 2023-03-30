@@ -20,23 +20,23 @@ from arcpy.sa import *
 from datetime import datetime
 
 # Set Environments
-#inWS = r"S:\Projects\NPCA\Data\GAP_AK\Final_Selected_Models_Rasters" # Folder containing all species' folders/models
-inWS = r"S:\Projects\NPCA\Data\GAP_AK\Test_Models" # Folder containing test group of models
+inWS = r"S:\Projects\NPCA\Data\GAP_AK\Final_Selected_Models_Rasters" # Folder containing all species' folders/models
 TifWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\StackingModels\1_TifTransfer"
-RastertoPoly = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\StackingModels\2_FixingModelExtents\RastertoPoly.gdb"
+RastertoPoly = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\StackingModels\FixingModelExtents\RastertoPoly.gdb"
 scratchWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\scratch"
 env.workspace = TifWS
 arcpy.env.overwriteOutput = True
 print("environments set")
 
 
-# create SGCN list
-SGCNlist = []
-SGCN_file = open(r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\NPCA_AlaskaSGCNlist_20230322.txt") #this list of species can be updated to select a subset of all SHMs provided by AK
-for word in SGCN_file:
+# create list to focus the following analysis on
+Spslist = []
+#Sps_file = open(r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\NPCA_AlaskaSGCNlist_20230322.txt") #this is the SGCN in AK
+Sps_file = open(r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\NPCA_AlaskaNOTsgcn_fix_20230328.txt") #list of models that aren't SGCN
+for word in Sps_file:
     word = word.rstrip("\n") # this removes the spaces after each word
-    SGCNlist.append(word)
-print("SGCN list created")
+    Spslist.append(word)
+print("Species list created")
 
 # Create a raster list
 arcpy.env.workspace = inWS
@@ -44,7 +44,7 @@ raster_list = arcpy.ListRasters("*","GRID")
 
 # Loop through the list of SGCN rasters to clean the data
 for raster in raster_list:
-    if raster in SGCNlist:
+    if raster in Spslist:
         print(raster)
         if (raster.endswith(('ind','com'))):
             # Reclassify inductive and combined rasters to be binary tiffs
@@ -55,7 +55,6 @@ for raster in raster_list:
             print("ind, com exported")
         elif (raster.endswith(('ded'))):
             ded_out = TifWS + "\\" + raster + ".tif"
-            
             # Loop through deductive models to re-focus the raster extent to just where the data are present
             # Convert raster to points
             inRaster = inWS +"\\"+ raster + ".tif"

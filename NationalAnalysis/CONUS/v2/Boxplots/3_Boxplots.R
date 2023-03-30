@@ -112,7 +112,7 @@ RSR.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_RSR.tif$AlabamaRiver_R
 
 Resilience.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_Resilience.tif$AlabamaRiver_Resilience)[[1]],
                       summary(FocalArea.raster.list$AviKwaAme_Resilience.tif$AviKwaAme_Resilience)[[1]],
-                      summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[1]],
+                      summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Resilience)[[1]],
                       summary(FocalArea.raster.list$Calumet_Resilience.tif$Calumet_Resilience)[[1]],
                       summary(FocalArea.raster.list$CrownOfTheContinent_Resilience.tif$CrownOfTheContinent_Resilience)[[1]],
                       summary(FocalArea.raster.list$DelawareRiverBasin_Resilience.tif$DelawareRiverBasin_Resilience)[[1]],
@@ -130,7 +130,7 @@ Resilience.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_Resilience.tif$
 
 ConnectivityClimateFlow.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_ConnectivityClimateFlow.tif$AlabamaRiver_ConnectivityClimateFlow)[[1]],
                                    summary(FocalArea.raster.list$AviKwaAme_ConnectivityClimateFlow.tif$AviKwaAme_ConnectivityClimateFlow)[[1]],
-                                   summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[1]],
+                                   summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_ConnectivityClimateFlow)[[1]],
                                    summary(FocalArea.raster.list$Calumet_ConnectivityClimateFlow.tif$Calumet_ConnectivityClimateFlow)[[1]],
                                    summary(FocalArea.raster.list$CrownOfTheContinent_ConnectivityClimateFlow.tif$CrownOfTheContinent_ConnectivityClimateFlow)[[1]],
                                    summary(FocalArea.raster.list$DelawareRiverBasin_ConnectivityClimateFlow.tif$DelawareRiverBasin_ConnectivityClimateFlow)[[1]],
@@ -147,7 +147,7 @@ ConnectivityClimateFlow.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_Co
 
 ConservationValues.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_ConservationValues.tif$AlabamaRiver_ConservationValues)[[1]],
                               summary(FocalArea.raster.list$AviKwaAme_ConservationValues.tif$AviKwaAme_ConservationValues)[[1]],
-                              summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_Richness)[[1]],
+                              summary(FocalArea.raster.list$BigThicket_Richness.tif$BigThicket_ConservationValues)[[1]],
                               summary(FocalArea.raster.list$Calumet_ConservationValues.tif$Calumet_ConservationValues)[[1]],
                               summary(FocalArea.raster.list$CrownOfTheContinent_ConservationValues.tif$CrownOfTheContinent_ConservationValues)[[1]],
                               summary(FocalArea.raster.list$DelawareRiverBasin_ConservationValues.tif$DelawareRiverBasin_ConservationValues)[[1]],
@@ -234,10 +234,13 @@ ConservationValues.Max <- max(summary(FocalArea.raster.list$AlabamaRiver_Conserv
                               summary(FocalArea.raster.list$TheLandsBetween_ConservationValues.tif$TheLandsBetween_ConservationValues)[[5]])
 
 # Check min/max objects created above
-RSR.Min
-Resilience.Min
-ConnectivityClimateFlow.Min
-ConservationValues.Min
+RSR.Min <- as.numeric(RSR.Min)
+Resilience.Min <- as.numeric(Resilience.Min)
+ConnectivityClimateFlow.Min <- as.numeric (ConnectivityClimateFlow.Min)
+
+ConservationValues.Min <- as.numeric(ConservationValues.Min)
+ConnectivityClimateFlow.Min <- Resilience.Min
+
 RSR.Max
 Resilience.Max
 ConnectivityClimateFlow.Max
@@ -255,8 +258,8 @@ for (i in FocalArea.raster.list){
   raster.name <- str_c(layer.name, ".tif")
   boxplot.input.object <- str_c(raster.name, "$", layer.name)
   variable.name <- str_split_fixed(layer.name, pattern = "_", n=2)[2]
-  
-  # Set the min/max axis limts and CONUS median based on variables 
+
+  # Set the min/max axis limits and CONUS median based on variables 
   if (variable.name == "RSR") {
     variable.min <- RSR.Min
     variable.max <- RSR.Max
@@ -280,8 +283,12 @@ for (i in FocalArea.raster.list){
   jpeg(output.file, width = 1000, height = 2000, units = "px", res = 300)
   
   # Create boxplot
+  variable.min <- as.numeric(variable.min)
   boxplot <- raster::boxplot(i,
                              ylim=c(variable.min, variable.max))
+  # # Create boxplot
+  # boxplot <- raster::boxplot(i, main = i,
+  #                            ylim=c(variable.min, variable.max))
   
   # Add CONUS medians
   abline(h=CONUS.median, col="blue", lwd=2, lty=2)
