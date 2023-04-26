@@ -24,10 +24,10 @@ arcpy.env.overwriteOutput = True
 
 #set variables
 SA_AnalysisLayer = r"S:\Projects\NPCA\Data\Intermediate\BigThicketDeepDive.gdb\PADUS_CliptoBigThicket"
-SA_ConVal = r"S:\Projects\NPCA\Data\Intermediate\ConservationValue\TOPConVal_BigThicket.tif"
+SA_ConVal = r"S:\Projects\NPCA\Data\Intermediate\BigThicketDeepDive.gdb\TOPConVal_BigThicket_v2"
 IUCN_CONUS = r"S:\Projects\_Workspaces\Hannah_Hyatt\ForestEndowment\Data\Intermediate.gdb\IUCNecosystems_CONUS"
-TabAreaGAP_out = r"S:\Projects\NPCA\Data\Intermediate\BigThicketDeepDive.gdb\TabArea_SAconval_GAPstatus"
-TabAreaMang_out = r"S:\Projects\NPCA\Data\Intermediate\BigThicketDeepDive.gdb\TabArea_SAconval_ManagedLands"
+TabAreaGAP_out = r"S:\Projects\NPCA\Data\Intermediate\BigThicketDeepDive.gdb\TabArea_SAconval_v2_GAPstatus"
+TabAreaMang_out = r"S:\Projects\NPCA\Data\Intermediate\BigThicketDeepDive.gdb\TabArea_SAconval_v2_ManagedLands"
 print ("variables set")
 
 ## Tabulate Area of PADUS managers within all study areas

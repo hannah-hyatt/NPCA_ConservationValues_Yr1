@@ -8,7 +8,7 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/BigThicketDeepDive.gdb/TabArea_SAconval_GAPstatus" ##UPDATE to deep dive study area of interest
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/BigThicketDeepDive.gdb/TabArea_SAconval_v2_GAPstatus" ##UPDATE to deep dive study area of interest
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
@@ -52,7 +52,7 @@ StudyArea_subset2 %>%
 ## Donut charts based on PADUS Management fields - simplified 
 
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/BigThicketDeepDive.gdb/TabArea_SAconval_ManagedLands" ##UPDATE to deep dive study area of interest
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/BigThicketDeepDive.gdb/TabArea_SAconval_v2_ManagedLands" ##UPDATE to deep dive study area of interest
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -75,7 +75,7 @@ StudyArea_subset2 <- StudyArea_subset1 %>% #calculates the percentages
   group_by(StudyArea) %>%
   mutate(PercentArea =   (Area / sum(Area)*100) )
 
-StudyArea_subset2$Mang_NS <- factor(StudyArea_subset2$Mang_NS, levels=c('Unmanaged','UNK','PVT','TRIB','USFS','NPS','STAT','LOC','FED','DOE','DOD','NGO','BLM','FWS'))
+StudyArea_subset2$Mang_NS <- factor(StudyArea_subset2$Mang_NS, levels =c('Unmanaged','UNK','PVT','TRIB','STAT','LOC','FED','DOE','DOD','NGO','BLM','FWS','USFS','NPS'))
 StudyArea_subset2 <- plyr::ddply(StudyArea_subset2, c('Mang_NS')) # sorts data frame in the same order as the factor levels
 
 StudyArea_subset2$ymax = cumsum(StudyArea_subset2$PercentArea) #sets top of rectangle for ggplot
@@ -90,9 +90,7 @@ StudyArea_subset2 %>%
   scale_fill_manual(values=c("Unmanaged" = "#B1B1B1",
                              "UNK" = "#7F7F7F", 
                              "PVT" = "#6a3d9a", 
-                             "TRIB" = "#b15928",
-                             "USFS" = "#1F601A",
-                             "NPS" = "#3BB432",
+                             "TRIB" = "#b15928", 
                              "STAT" = "#ffff99", 
                              "LOC" = "#e31a1c", 
                              "FED" = "#fb9a99",
@@ -100,7 +98,9 @@ StudyArea_subset2 %>%
                              "DOD" = "#1f78b4", 
                              "NGO" = "#ff7f00", 
                              "BLM" = "#a6cee3",
-                             "FWS" = "#fdbf6f"))+
+                             "FWS" = "#fdbf6f", 
+                             "USFS" = "#1F601A", 
+                             "NPS" = "#3BB432"))+
   theme_void()+ #punches hole in donut
   theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
   xlim(1,4) #sets width of donut

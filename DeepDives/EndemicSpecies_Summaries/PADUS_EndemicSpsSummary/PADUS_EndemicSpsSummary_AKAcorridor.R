@@ -14,9 +14,6 @@ StudyAreasFC <- arc.open(StudyAreasFC)
 StudyAreasFC <- arc.select(StudyAreasFC)
 StudyAreasFC <- as.data.frame(StudyAreasFC)
 
-cutecodes <- read.csv("S:/Projects/_Workspaces/Hannah_Hyatt/MoBI_Gov_Relations/SpeciesLists/CuteCodeCrosswalk.csv")
-cutecodes$cutecode <- paste0(cutecodes$ï..cutecode)
-
 inputTabAreaGAP$OBJECTID <- NULL
 
 ## split out study area
@@ -52,7 +49,7 @@ Species_subset3 <- Species_subset2 %>%
   group_by(Scientific) %>%
   mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>1]))
 
-Species_subset3 <- Species_subset3[which(Species_subset3$TotalPosPercent>40),]
+Species_subset3 <- Species_subset3[which(Species_subset3$TotalPosPercent>5),]
 
 Species_subset3$axislable <- paste0(Species_subset3$Scientific, " (", Species_subset3$Rounded_GR, ")") 
 Species_subset3$GAPstatus_fin <- paste0("GAP",Species_subset3$GAPstatus_fin)

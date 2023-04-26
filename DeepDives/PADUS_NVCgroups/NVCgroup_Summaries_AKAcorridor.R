@@ -8,17 +8,17 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-# inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
-# inputTabAreaGAP <- arc.open(inputTabAreaGAP)
-# inputTabAreaGAP <- arc.select(inputTabAreaGAP)
-# inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
-
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_AKAcorridor" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_ManagedLands"
+# inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+# inputTabAreaGAP <- arc.open(inputTabAreaGAP)
+# inputTabAreaGAP <- arc.select(inputTabAreaGAP)
+# inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
+
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_Mangstatus_AKAcorridor"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -31,17 +31,19 @@ inputRaster <- as.data.frame(inputRaster)
 inputTabAreaGAP$OBJECTID <- NULL
 inputTabAreaManaged$OBJECTID <- NULL
 
-## split out study area
-inputTabAreaGAP$StudyArea <- "NA"
-inputTabAreaGAP$StudyArea <- gsub("\\(([^()]+)\\)", "\\1",str_extract(inputTabAreaGAP$NPCA_Status_GAP_StudyArea, "\\(([^()]+)\\)"))
-
 ## split out protected unprotected
 inputTabAreaGAP$Protected <- "NA"
-inputTabAreaGAP$Protected <- gsub("^(.*?),.*", "\\1", inputTabAreaGAP$NPCA_Status_GAP_StudyArea)
+inputTabAreaGAP$Protected <- gsub("^(.*?),.*", "\\1", inputTabAreaGAP$Corridor_Analysis)
+
+## split out by corridor presence
+# inputTabAreaGAP$Corridor <- "NA"
+# inputTabAreaGAP$Corridor <- gsub(".*,", "",inputTabAreaGAP$Corridor_Analysis) #takes text after the comma
+# inputTabAreaGAP$Corridor <- gsub("-.*", "",inputTabAreaGAP$Corridor)#takes text before hyphen
+# inputTabAreaGAP$Corridor <- trimws(inputTabAreaGAP$Corridor, which = c("both", "left", "right"), whitespace = "[ \t\r\n]")#removes whitespace before and after text
 
 ## split out GAP status
 inputTabAreaGAP$GAPstatus <- "NA"
-inputTabAreaGAP$GAPstatus <- sub(".*GAP ", "", inputTabAreaGAP$NPCA_Status_GAP_StudyArea)    
+inputTabAreaGAP$GAPstatus <- sub(".*GAP ", "", inputTabAreaGAP$Corridor_Analysis)    
 inputTabAreaGAP$GAPstatus <- as.integer(substring(inputTabAreaGAP$GAPstatus, 1, 1))
 
 # this enables verification of Naturalness in a later step
@@ -51,67 +53,48 @@ inputTabAreaGAP <- merge(inputTabAreaGAP, inputRaster[c("IVC_NAME","ROUNDED_G_RA
 inputTabAreaGAP$G_RANK <- substr(inputTabAreaGAP$ROUNDED_G_RANK, 1, 2)
 inputTabAreaGAP <- inputTabAreaGAP[which(inputTabAreaGAP$G_RANK %in% c("G1", "G2", "G3")), ]
 
+# list NVC groups that overlap with the AKA corridor
+NVC_inCorridor <-unique(inputTabAreaGAP$IVC_NAME[which(inputTabAreaGAP$Corridor=="Inside Corridor")])
 
-lstStudyAreas <- unique(inputTabAreaGAP$StudyArea)
+NVC_subset1 <- inputTabAreaGAP %>%
+  group_by( Corridor, Protected, GAPstatus, IVC_NAME, G_RANK) %>% #NPCA_status_GAP_StudyArea,
+  summarise(TotalArea = sum(Area)) %>% 
+  ungroup()
+
+NVC_subset2 <- NVC_subset1 %>%
+  group_by(IVC_NAME) %>%
+  mutate(PercentArea =   (TotalArea / sum(TotalArea)*100) ) %>%
+  mutate(TotalArea2 = if_else(is.na(Corridor), -TotalArea, TotalArea)) %>%
+  mutate(PercentArea2 = if_else(is.na(Corridor), -PercentArea, PercentArea))
+
+NVC_subset3 <- NVC_subset2 %>%
+  group_by(IVC_NAME) %>%
+  mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
+
+NVC_subset3 <- NVC_subset3[which(NVC_subset3$TotalPosPercent>0),]
+
+NVC_subset3$axislable <- paste0(NVC_subset3$IVC_NAME, " (", NVC_subset3$G_RANK, ")") 
+NVC_subset3$GAPstatus <- paste0("GAP",NVC_subset3$GAPstatus)
+NVC_subset3$GAPstatus[which(NVC_subset3$GAPstatus=="GAPNA")] <- "Unprotected"
+NVC_subset3$GAPstatus <- factor(NVC_subset3$GAPstatus, levels = c("Unprotected","GAP4","GAP3","GAP2","GAP1"))
 
 
-for(i in 1:length(lstStudyAreas)){
-  print(paste("working on ", lstStudyAreas[i], sep=""))
-  StudyArea_subset <- inputTabAreaGAP[which(inputTabAreaGAP$StudyArea==lstStudyAreas[i]),]
-  
-  lstGroups_subset <- unique(StudyArea_subset[which(StudyArea_subset$Naturalnes=="Natural"),"IVC_NAME"] )
-  
-  # create an empty data frame
-  StudyAreaGroup_subsetComb <- inputTabAreaGAP[0,]
-  
-  for(j in 1:length(lstGroups_subset)){  #
-    print(paste("working on ", lstGroups_subset[j], sep=""))
-    StudyAreaGroup_subset <- inputTabAreaGAP[which(inputTabAreaGAP$IVC_NAME==lstGroups_subset[j]),]
-    StudyAreaGroup_subset[which(StudyAreaGroup_subset$StudyArea!=lstStudyAreas[i]),"StudyArea"] <- NA
-    
-    StudyAreaGroup_subsetComb <- rbind(StudyAreaGroup_subsetComb, StudyAreaGroup_subset)
-    
-    StudyAreaGroup_subset1 <- StudyAreaGroup_subsetComb %>%
-      group_by( StudyArea, Protected, GAPstatus, IVC_NAME, G_RANK) %>% #NPCA_status_GAP_StudyArea,
-      summarise(TotalArea = sum(Area)) %>% 
-      ungroup()
-    
-    StudyAreaGroup_subset2 <- StudyAreaGroup_subset1 %>%
-      group_by(IVC_NAME) %>%
-      mutate(PercentArea =   (TotalArea / sum(TotalArea)*100) ) %>%
-      mutate(TotalArea2 = if_else(is.na(StudyArea), -TotalArea, TotalArea)) %>%
-      mutate(PercentArea2 = if_else(is.na(StudyArea), -PercentArea, PercentArea))
-    
-    StudyAreaGroup_subset3 <- StudyAreaGroup_subset2 %>%
-      group_by(IVC_NAME) %>%
-      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
-    
-    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>0),]
-    
-    StudyAreaGroup_subset3$axislable <- paste0(StudyAreaGroup_subset3$IVC_NAME, " (", StudyAreaGroup_subset3$G_RANK, ")") 
-    StudyAreaGroup_subset3$GAPstatus <- paste0("GAP",StudyAreaGroup_subset3$GAPstatus)
-    StudyAreaGroup_subset3$GAPstatus[which(StudyAreaGroup_subset3$GAPstatus=="GAPNA")] <- "Unprotected"
-    StudyAreaGroup_subset3$GAPstatus <- factor(StudyAreaGroup_subset3$GAPstatus, levels = c("Unprotected","GAP4","GAP3","GAP2","GAP1"))
-    
-    
-    StudyAreaGroup_subset3 %>%
-      ggplot(aes(x = reorder(axislable, TotalPosPercent),
-                 y = PercentArea2,
-                 fill = GAPstatus)) +
-      geom_col() +
-      coord_flip() +
-      geom_abline(slope=0, intercept=0.0,  col = "white") +
-      ggtitle(paste(lstStudyAreas[i],"Study Area")) +
-      ylab("Outside Study Area                                                             Inside Study Area") +
-      scale_y_continuous(limits = c(-100, 100), breaks=c(-100,-75,-50,-25, 0, 25,50,75,100), labels=c("100%","75%","50%","25%", "0%", "25%","50%","75%","100%")) +
-      scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"), guide = guide_legend(reverse = TRUE)) +
-      theme_minimal() +
-      theme(panel.grid = element_blank(),
-            legend.title=element_blank(),
-            legend.position = "none",
-            plot.title.position = "plot")
-  }
-}
+NVC_subset3 %>%
+  ggplot(aes(x = reorder(axislable, TotalPosPercent),
+             y = PercentArea2,
+             fill = GAPstatus)) +
+  geom_col() +
+  coord_flip() +
+  geom_abline(slope=0, intercept=0.0,  col = "white") +
+  ggtitle(paste("Avi Kwa Ame Corridor")) +
+  ylab("Outside Corridor                                                            Inside Corridor") +
+  scale_y_continuous(limits = c(-100, 100), breaks=c(-100,-75,-50,-25, 0, 25,50,75,100), labels=c("100%","75%","50%","25%", "0%", "25%","50%","75%","100%")) +
+  scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"), guide = guide_legend(reverse = TRUE)) +
+  theme_minimal() +
+  theme(panel.grid = element_blank(),
+        legend.title=element_blank(),
+        legend.position = "none",
+        plot.title.position = "plot")
 
 #-----------------------------------------------------------------------
 ### Repeat the above steps for results summarized by Manager Name

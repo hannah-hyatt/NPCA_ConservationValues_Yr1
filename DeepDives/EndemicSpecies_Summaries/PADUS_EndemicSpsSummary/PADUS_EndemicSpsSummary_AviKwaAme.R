@@ -34,8 +34,8 @@ inputTabAreaGAP$GAPstatus_fin <- sub(".*GAP", "", inputTabAreaGAP$GAPstatus)
 inputTabAreaGAP$GAPstatus_fin <- gsub("(.*),.*", "\\1",inputTabAreaGAP$GAPstatus_fin)
 
 ## load in unique lists
-lstSpecies <- unique(inputTabAreaGAP$Scientific)
-#lstSpecies <- unique(inputTabAreaGAP[which(inputTabAreaGAP$Highlight_sps=="TRUE"),"Scientific_Name"])
+#lstSpecies <- unique(inputTabAreaGAP$Scientific)
+lstSpecies <- unique(inputTabAreaGAP[which(inputTabAreaGAP$Highlight=="Yes"),"Scientific"])
 lstStudyAreas <- unique(inputTabAreaGAP$StudyArea)
 
 ## loop through species list and study areas
@@ -47,10 +47,10 @@ for(i in 1:length(lstStudyAreas)){
   #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific"] )
   
   ## Select all species
-  lstSpecies_subset <- unique(StudyArea_subset$Scientific)
+  #lstSpecies_subset <- unique(StudyArea_subset$Scientific)
   
   ## Select a subset of the species - simplifies the bar chart output for presentation 
-  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific"] )
+  lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight=="Yes"),"Scientific"] )
   
   # create an empty data frame
   StudyAreaSpecies_subsetComb <- inputTabAreaGAP[0,]
