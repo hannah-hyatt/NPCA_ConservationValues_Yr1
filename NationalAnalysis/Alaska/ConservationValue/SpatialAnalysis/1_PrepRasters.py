@@ -20,8 +20,8 @@ print(now)
 ### Set Variables ###
 ResilientSites = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\resilient_sites_national\Resilience.gdb\Resilient_Sites_Terr_and_Coast_Alaska")
 ConnectivityClimateFlow = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\Connectivity_and_Climate_Flow_Raw\Connectivity_and_Climate_Flow_Raw.gdb\Climate_Flow_W2W_Alaska")
-RSR = arcpy.Raster(r"S:\Data\NatureServe\Species_Distributions\MoBI_HabitatModels\April2021\RSR_All.tif") #Update with RSR layer for AK
-outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\1_DecileCalculationInputs"
+RSR = arcpy.Raster(r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\StackingModels\3_MosaicRSR\Alaska_RSR_SGCN_20230330.tif")
+outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\Alaska\ConservationValue\1_DecileCalculations"
 
 ### Set Environments ###
 arcpy.env.overwriteOutput = True
@@ -37,10 +37,10 @@ ConnectivityClimateFlow_30m = outWS + "\\ConnectivityClimateFlow_30m.tif"
 arcpy.management.Resample(ConnectivityClimateFlow, ConnectivityClimateFlow_30m, 30)
 print("Connectivity and Climate Flow raster resampled.")
 
-#### MoBI Species Richness ###
-Richness_30m = outWS + "\\Richness_30m.tif"
-arcpy.management.Resample(Richness, Richness_30m, 30)
-print("Species Richness raster resampled.")
+#### MoBI Range Size Rarity ###
+RSR_30m = outWS + "\\RSR_30m.tif"
+arcpy.management.Resample(RSR, RSR_30m, 30)
+print("RSR raster resampled.")
 
 ############################################
 ### Process the "Resilient Sites" raster ###
