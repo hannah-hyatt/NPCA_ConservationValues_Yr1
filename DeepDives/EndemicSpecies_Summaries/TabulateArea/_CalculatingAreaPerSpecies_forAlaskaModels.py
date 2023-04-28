@@ -30,7 +30,7 @@ arcpy.env.overwriteOutput = True
 # Set Variables
 Boundary = r"S:\Projects\NPCA\Data\Intermediate\BearCoastDeepDive.gdb\PADUS_AK_StudyAreas_union_AnalysisLayer" # UPDATE
 outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\SpeciesSummaries\IntModelTbls_BearCoast" # UPDATE
-outTable = r"MoBIshms_TabAreaMerge_AK" # UPDATE
+outTable = r"AKGAPshms_TabAreaMerge_AK" # UPDATE
 Boundary_field = "NPCA_Status_GAP_StudyArea" # UPDATE
 
 # Create Species List
@@ -56,7 +56,7 @@ for raster in RasterList:
         # Calculate area in meters squared
         print("Calculating area for "+species)
         area_dbf = outWS + "\\" + species + "_areatable.dbf"
-        TabulateArea(SpeciesRaster, "Value", Boundary, Boundary_field, area_dbf, 60)
+        TabulateArea(SpeciesRaster, "Value", Boundary, Boundary_field, area_dbf, 60,"CLASSES_AS_ROWS")
        
         # Add/calculate cutecode field in dbf output
         field = "model_name"
@@ -73,8 +73,8 @@ arcpy.Merge_management(listTable, Areas_merged)
 print("merge complete")
 
 # join species information
-cutecode_crosswalk = r"S:\Projects\_Workspaces\Hannah_Hyatt\MoBI_Gov_Relations\SpeciesLists\CuteCodeCrosswalk.csv"
-arcpy.management.JoinField(Areas_merged, "cutecode", cutecode_crosswalk, "cutecode", "Scientific_Name;Common_Name;Rounded_GRank;ESA_Status")
+species_crosswalk = r"S:\Projects\NPCA\Data\Intermediate\AK_GAPmodels_Species_Crosswalk.csv"
+arcpy.management.JoinField(Areas_merged, "model_name", species_crosswalk, "model_name", "Scientific_Name;Common_Name;Grank;AK_Srank")
 
 # Print end time
 timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
