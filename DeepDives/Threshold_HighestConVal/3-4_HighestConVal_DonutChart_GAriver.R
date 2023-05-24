@@ -15,6 +15,9 @@ inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
 inputTabAreaGAP$OBJECTID <- NULL
 
+CutecodeCrosswalk <- read.csv("S:/Projects/_Workspaces/Hannah_Hyatt/MoBI_Gov_Relations/SpeciesLists/CuteCodeCrosswalk.csv")
+CutecodeCrosswalk <- as.data.frame(CutecodeCrosswalk)
+
 # Create Gap Status field
 inputTabAreaGAP$GAPstatus <- paste0("GAP",inputTabAreaGAP$GAP_Sts)
 

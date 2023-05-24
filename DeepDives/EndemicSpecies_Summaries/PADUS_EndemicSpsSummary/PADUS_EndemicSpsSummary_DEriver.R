@@ -76,7 +76,7 @@ for(i in 1:length(lstStudyAreas)){
     
     StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset2 %>%
       group_by(Scientific) %>%
-      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>1]))
+      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>5]))
     
     StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>0),]
 

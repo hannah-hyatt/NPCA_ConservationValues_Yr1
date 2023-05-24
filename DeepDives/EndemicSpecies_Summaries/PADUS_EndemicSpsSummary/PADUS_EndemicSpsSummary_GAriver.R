@@ -8,15 +8,19 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- read.csv("S:/Projects/NPCA/Workspace/Hannah_Hyatt/SpeciesSummaries/Int_ModelTbls_GAriver/MoBIshms_TabAreaMerge_GAriver.csv") # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
-#inputTabAreaGAP <- arc.open(inputTabAreaGAP)
-#inputTabAreaGAP <- arc.select(inputTabAreaGAP)
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/Species_Summaries.gdb/MoBIshms_TabAreaMerge_GAriverV2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- arc.open(inputTabAreaGAP)
+inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
-StudyAreasFC <- "S:/Projects/NPCA/Data/Final/StudyAreas_fin.gdb/NPCA_StudyAreas_CONUS"
+StudyAreasFC <- "S:/Projects/NPCA/Data/Final/StudyAreas_fin.gdb/NPCA_StudyAreas_V2"
 StudyAreasFC <- arc.open(StudyAreasFC)
 StudyAreasFC <- arc.select(StudyAreasFC)
 StudyAreasFC <- as.data.frame(StudyAreasFC)
+
+CutecodeCrosswalk <- read.csv("S:/Projects/_Workspaces/Hannah_Hyatt/MoBI_Gov_Relations/SpeciesLists/CuteCodeCrosswalk.csv")
+CutecodeCrosswalk <- as.data.frame(CutecodeCrosswalk)
+CutecodeCrosswalk$cutecode <- paste(CutecodeCrosswalk$ï..cutecode)
 
 inputTabAreaGAP$OBJECTID <- NULL
 
@@ -34,8 +38,11 @@ inputTabAreaGAP$GAPstatus <- sub("\\(.*", "", inputTabAreaGAP$NPCA_STATU)
 inputTabAreaGAP$GAPstatus_fin <- sub(".*GAP", "", inputTabAreaGAP$GAPstatus)
 inputTabAreaGAP$GAPstatus_fin <- gsub("(.*),.*", "\\1",inputTabAreaGAP$GAPstatus_fin)
 
+## Join species information
+inputTabAreaGAP <- merge(inputTabAreaGAP, CutecodeCrosswalk, by="cutecode")
+
 ## load in unique lists
-lstSpecies <- unique(inputTabAreaGAP$Scientific)
+lstSpecies <- unique(inputTabAreaGAP$Scientific_Name)
 #lstSpecies <- unique(inputTabAreaGAP[which(inputTabAreaGAP$Highlight_sps=="TRUE"),"Scientific_Name"])
 lstStudyAreas <- unique(inputTabAreaGAP$StudyArea)
 
@@ -45,10 +52,10 @@ for(i in 1:length(lstStudyAreas)){
   StudyArea_subset <- inputTabAreaGAP[which(inputTabAreaGAP$StudyArea==lstStudyAreas[i]),]
   
   ## Select all imperiled species
-  lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific"] )
+  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific"] )
   
   ## Select all species in study area if not a lot of imperiled endemics present
-  #lstSpecies_subset <- unique(StudyArea_subset$Scientific)
+  lstSpecies_subset <- unique(StudyArea_subset$Scientific_Name)
   
   ## Select a subset of the species - simplifies the bar chart output for presentation 
   #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific"] )
@@ -58,33 +65,33 @@ for(i in 1:length(lstStudyAreas)){
   
   for(j in 1:length(lstSpecies_subset)){  #
     print(paste("working on ", lstSpecies[j], sep=""))
-    StudyAreaSpecies_subset <- inputTabAreaGAP[which(inputTabAreaGAP$Scientific==lstSpecies_subset[j]),]
+    StudyAreaSpecies_subset <- inputTabAreaGAP[which(inputTabAreaGAP$Scientific_Name==lstSpecies_subset[j]),]
     StudyAreaSpecies_subset[which(StudyAreaSpecies_subset$StudyArea!=lstStudyAreas[i]),"StudyArea"] <- NA
     
     StudyAreaSpecies_subsetComb <- rbind(StudyAreaSpecies_subsetComb, StudyAreaSpecies_subset)
     
     StudyAreaSpecies_subset1 <- StudyAreaSpecies_subsetComb %>%
-      group_by( StudyArea, GAPstatus_fin, Scientific,Rounded_GR) %>% #NPCA_status_GAP_StudyArea,
+      group_by( StudyArea, GAPstatus_fin, Scientific_Name,Rounded_GRank) %>% #NPCA_status_GAP_StudyArea,
       summarise(TotalArea = sum(VALUE_1)) %>% 
       ungroup()
     
     StudyAreaSpecies_subset2 <- StudyAreaSpecies_subset1 %>%
-      group_by(Scientific) %>%
+      group_by(Scientific_Name) %>%
       mutate(PercentArea =   (TotalArea / sum(TotalArea)*100) ) %>%
       mutate(TotalArea2 = if_else(is.na(StudyArea), -TotalArea, TotalArea)) %>%
       mutate(PercentArea2 = if_else(is.na(StudyArea), -PercentArea, PercentArea))
     
     StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset2 %>%
-      group_by(Scientific) %>%
+      group_by(Scientific_Name) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>10]))
     
     StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>0),]
 
-    StudyAreaSpecies_subset3$axislable <- paste0(StudyAreaSpecies_subset3$Scientific, " (", StudyAreaSpecies_subset3$Rounded_GR, ")") 
+    StudyAreaSpecies_subset3$axislable <- paste0(StudyAreaSpecies_subset3$Scientific_Name, " (", StudyAreaSpecies_subset3$Rounded_GRank, ")") 
     StudyAreaSpecies_subset3$GAPstatus_fin <- paste0("GAP",StudyAreaSpecies_subset3$GAPstatus_fin)
     StudyAreaSpecies_subset3$GAPstatus_fin <- trimws(StudyAreaSpecies_subset3$GAPstatus_fin)
-    StudyAreaSpecies_subset3$GAPstatus_fin <- factor(StudyAreaSpecies_subset3$GAPstatus_fin, levels = c("GAPUnprotected","GAP 4","GAP 3","GAP 2","GAP 1"))
-
+    StudyAreaSpecies_subset3$GAPstatus_fin <- factor(StudyAreaSpecies_subset3$GAPstatus_fin, levels = c("GAPUnprotected","GAP4","GAP3","GAP2","GAP1"))
+    
     StudyAreaSpecies_subset3 %>%
       ggplot(aes(x = reorder(axislable, TotalPosPercent),
                  y = PercentArea2,

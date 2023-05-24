@@ -8,15 +8,15 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-# inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
-# inputTabAreaGAP <- arc.open(inputTabAreaGAP)
-# inputTabAreaGAP <- arc.select(inputTabAreaGAP)
-# inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
-
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
+
+# inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_NVCgrps_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+# inputTabAreaGAP <- arc.open(inputTabAreaGAP)
+# inputTabAreaGAP <- arc.select(inputTabAreaGAP)
+# inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
 inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_ManagedLands"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
@@ -49,7 +49,7 @@ inputTabAreaGAP <- merge(inputTabAreaGAP, inputRaster[c("IVC_NAME","ROUNDED_G_RA
 
 # subset by G Rank
 inputTabAreaGAP$G_RANK <- substr(inputTabAreaGAP$ROUNDED_G_RANK, 1, 2)
-inputTabAreaGAP <- inputTabAreaGAP[which(inputTabAreaGAP$G_RANK %in% c("G1", "G2", "G3")), ]
+inputTabAreaGAP <- inputTabAreaGAP[which(inputTabAreaGAP$G_RANK %in% c("G1", "G2", "G3","G4")), ]
 
 
 lstStudyAreas <- unique(inputTabAreaGAP$StudyArea)
@@ -84,7 +84,7 @@ for(i in 1:length(lstStudyAreas)){
     
     StudyAreaGroup_subset3 <- StudyAreaGroup_subset2 %>%
       group_by(IVC_NAME) %>%
-      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
+      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>5]))
     
     StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>0),]
     
@@ -116,6 +116,7 @@ for(i in 1:length(lstStudyAreas)){
 #-----------------------------------------------------------------------
 ### Repeat the above steps for results summarized by Manager Name
 
+
 ## split out study area
 inputTabAreaManaged$StudyArea <- "NA"
 inputTabAreaManaged$StudyArea <- gsub("\\(([^()]+)\\)", "\\1",str_extract(inputTabAreaManaged$NPCA_Status_Mang_StudyArea, "\\(([^()]+)\\)"))
@@ -134,7 +135,7 @@ inputTabAreaManaged <- merge(inputTabAreaManaged, inputRaster[c("IVC_NAME","ROUN
 
 # subset by G Rank
 inputTabAreaManaged$G_RANK <- substr(inputTabAreaManaged$ROUNDED_G_RANK, 1, 2)
-inputTabAreaManaged <- inputTabAreaManaged[which(inputTabAreaManaged$G_RANK %in% c("G1", "G2", "G3")), ]
+inputTabAreaManaged <- inputTabAreaManaged[which(inputTabAreaManaged$G_RANK %in% c("G1", "G2", "G3","G4")), ]
 
 lstStudyAreas <- unique(inputTabAreaManaged$StudyArea)
 lstManagers <- unique(inputTabAreaManaged$Mang_Name)
@@ -169,7 +170,7 @@ for(i in 1:length(lstStudyAreas)){
     
     StudyAreaGroup_subset3 <- StudyAreaGroup_subset2 %>%
       group_by(IVC_NAME) %>%
-      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
+      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>5]))
     
     StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>0),]
     

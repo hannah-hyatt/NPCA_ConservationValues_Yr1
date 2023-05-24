@@ -8,7 +8,7 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_SAconval_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis_Species.gdb/TabArea_SAconcal_GAPstatus_V2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
@@ -20,36 +20,37 @@ inputTabAreaGAP$GAPstatus <- paste0("GAP",inputTabAreaGAP$GAP_Sts)
 
 # Create plot
 StudyArea_subset1 <- inputTabAreaGAP %>% #groups by study area and calculates the total area
-  group_by( StudyArea, GAPstatus) %>%
+  group_by( Value, GAPstatus) %>%
   summarise(Area = sum(Area)) %>% 
   ungroup()
 
 StudyArea_subset2 <- StudyArea_subset1 %>% #calculates the percentages
-  group_by(StudyArea) %>%
+  group_by(Value) %>%
   mutate(PercentArea =   (Area / sum(Area)*100) )
 
-StudyArea_subset2$GAPstatus <- factor(StudyArea_subset2$GAPstatus, levels = c("GAPNA","GAP4","GAP3","GAP2","GAP1"))
+StudyArea_subset2$GAPstatus <- factor(StudyArea_subset2$GAPstatus, levels = c("GAPUnprotected","GAP4","GAP3","GAP2","GAP1"))
 StudyArea_subset2$ymax = cumsum(StudyArea_subset2$PercentArea) #sets top of rectangle for ggplot
 StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom of rectange for ggplot
 
 StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = GAPstatus))+
   geom_rect()+
-  ggtitle("AviKwaAme") +
+  ggtitle("Southern Appalachian") +
   coord_polar(theta = "y")+ #makes plot circular
   scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"))+
   theme_void()+ #punches hole in donut
   theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
   xlim(1,4) #sets width of donut
-#facet_wrap(vars(), ncol=8) 
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/EsriMapGallery/Data/HighestConVal_GAPsts_SouthernApp.csv")
 
+#ggsave(paste0("HighestConVal_GAPsts.png"), plot = p, bg = "transparent",dpi = 300)
 
 
 ##----------------------------------------------------------------------------------------------------------------------#
 ## Donut charts based on PADUS Management fields - simplified 
 
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_SAconval_ManagedLands"
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis_Species.gdb/TabArea_SAconval_ManagedLands_V2"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -63,12 +64,12 @@ inputTabAreaManaged$Manager <- paste(inputTabAreaManaged$Mang_NS)
 
 #create plot
 StudyArea_subset1 <- inputTabAreaManaged %>% #groups by study area and calculates the total area
-  group_by( StudyArea, Mang_NS) %>%
+  group_by( Value, Mang_NS) %>%
   summarise(Area = sum(Area)) %>% 
   ungroup()
 
 StudyArea_subset2 <- StudyArea_subset1 %>% #calculates the percentages
-  group_by(StudyArea) %>%
+  group_by(Value) %>%
   mutate(PercentArea =   (Area / sum(Area)*100) )
 
 StudyArea_subset2$Mang_NS <- factor(StudyArea_subset2$Mang_NS, levels=c('PVT','USFS','NPS','LOC','FED','DOE','DOD','NGO','BLM','FWS','TRIB','STAT','Unmanaged'))
@@ -81,7 +82,7 @@ StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom o
 StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = Mang_NS))+
   geom_rect()+
-  ggtitle("AviKwaAme") +
+  ggtitle("Southern Appalachian") +
   coord_polar(theta = "y")+ #makes plot circular
   #scale_y_reverse()+
   scale_fill_manual(values=c("Unmanaged" = "#B1B1B1",
@@ -99,5 +100,7 @@ StudyArea_subset2 %>%
                              "BLM" = "#a6cee3",
                              "FWS" = "#fdbf6f"))+
   theme_void()+ #punches hole in donut
-  theme(legend.position = "bottom", legend.title = element_blank(),plot.title.position = "plot")+
+  theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
   xlim(1,4) #sets width of donut
+#ggsave(paste0("HighestConVal_Mangsts.png"), plot = p, bg = "transparent",dpi = 300)
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/EsriMapGallery/Data/HighestConVal_Mangsts_SouthernApp.csv")

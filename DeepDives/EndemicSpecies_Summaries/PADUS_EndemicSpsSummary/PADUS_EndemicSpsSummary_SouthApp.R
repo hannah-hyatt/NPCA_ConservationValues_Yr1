@@ -1,10 +1,11 @@
 library(tidyverse)
 library(arcgisbinding)
+library(ggplot2)
 
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/Species_Summaries.gdb/MoBIshms_TabAreaMerge_BigThicket" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/Species_Summaries.gdb/MoBIshms_TabAreaMerge" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
@@ -34,7 +35,8 @@ inputTabAreaGAP$GAPstatus_fin <- gsub(" ", "", inputTabAreaGAP$GAPstatus_fin)
 
 ## load in unique lists
 
-lstSpecies <- unique(inputTabAreaGAP[which(inputTabAreaGAP$Highlight_sps=="TRUE"),"Scientific_Name"])
+#lstSpecies <- unique(inputTabAreaGAP[which(inputTabAreaGAP$Highlight_sps=="TRUE"),"Scientific_Name"])
+lstSpecies <- unique(inputTabAreaGAP$Scientific_Name)
 lstStudyAreas <- unique(inputTabAreaGAP$StudyArea)
 
 ## join the area of each study area to the tab area input
@@ -46,10 +48,10 @@ for(i in 1:length(lstStudyAreas)){
   StudyArea_subset <- inputTabAreaGAP[which(inputTabAreaGAP$StudyArea==lstStudyAreas[i]),]
   
   ## Select all imperiled species
-  lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific_Name"] )
+  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific_Name"] )
   
   ## Select a subset of the species - simplifies the bar chart output for presentation 
-  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific_Name"] )
+  lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific_Name"] )
   
   # create an empty data frame
   StudyAreaSpecies_subsetComb <- inputTabAreaGAP[0,]
@@ -76,7 +78,7 @@ for(i in 1:length(lstStudyAreas)){
       group_by(Scientific_Name) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>99.99),]
+    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>0),]
 
     StudyAreaSpecies_subset3$axislable <- paste0(StudyAreaSpecies_subset3$Scientific_Name, " (", StudyAreaSpecies_subset3$Rounded_GRank, ")") 
     StudyAreaSpecies_subset3$GAPstatus_fin <- paste0("GAP",StudyAreaSpecies_subset3$GAPstatus_fin)
@@ -94,11 +96,14 @@ for(i in 1:length(lstStudyAreas)){
       scale_y_continuous(limits = c(-100, 100), breaks=c(-100,-75,-50,-25, 0, 25,50,75,100), labels=c("100%","75%","50%","25%", "0%", "25%","50%","75%","100%")) +
       scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"), guide = guide_legend(reverse = TRUE)) +
       theme_minimal() +
+      #theme_void()
+      #theme(panel.background = element_rect(fill = "transparent"), panel.grid = element_blank(),legend.position = "bottom")
+      #theme(panel.background = element_rect(fill = "transparent"), legend.position = "bottom")
       theme(panel.grid = element_blank(),legend.position = "bottom")
   }
   }
-
-
+#ggsave(paste0("EndSpsSumm", i,".png"), plot = p, bg = "transparent",dpi = 300)
+write.csv(StudyAreaSpecies_subset3, "S:/Projects/NPCA/MapExports/Draft/EsriMapGallery/Data/BarChart_EndemicSps_SouthernApp.csv")
 #------------------------------------------------------------------------------------------------------------------------
 # repeat above analysis for management type
 
