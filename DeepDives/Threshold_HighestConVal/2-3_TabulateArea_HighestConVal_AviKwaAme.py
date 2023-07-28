@@ -22,11 +22,11 @@ arcpy.CheckOutExtension('Spatial')
 arcpy.env.overwriteOutput = True
 
 #set variables
-SA_AnalysisLayer = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\PADUS_AKA_ProposedNatMon_AnalysisLayer"
+SA_AnalysisLayer = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\PADUS_AviKwaAme_AnalysisLayer_OLD"
 SA_ConVal = r"S:\Projects\NPCA\Data\Intermediate\ConservationValue\ConVal_AKA_Binary.tif"
 IUCN_CONUS = r"S:\Projects\_Workspaces\Hannah_Hyatt\ForestEndowment\Data\Intermediate.gdb\IUCNecosystems_CONUS"
-TabAreaGAP_out = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\TabArea_SAconval_GAPstatus"
-TabAreaMang_out = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\TabArea_SAconval_ManagedLands"
+TabAreaGAP_out = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\TabArea_SAconval_GAPstatus_OLD"
+TabAreaMang_out = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\TabArea_SAconval_ManagedLands_OLD"
 print ("variables set")
 
 ## Tabulate Area of PADUS managers within all study areas

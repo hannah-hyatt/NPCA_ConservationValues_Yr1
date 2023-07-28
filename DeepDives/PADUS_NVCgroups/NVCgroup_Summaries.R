@@ -8,7 +8,7 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_GAPstatusV2" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
@@ -18,7 +18,7 @@ inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 # inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 # inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_ManagedLands"
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_NVCgrps_ManagedLandsV2"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -41,7 +41,8 @@ inputTabAreaGAP$Protected <- gsub("^(.*?),.*", "\\1", inputTabAreaGAP$NPCA_Statu
 
 ## split out GAP status
 inputTabAreaGAP$GAPstatus <- "NA"
-inputTabAreaGAP$GAPstatus <- sub(".*GAP ", "", inputTabAreaGAP$NPCA_Status_GAP_StudyArea)    
+inputTabAreaGAP$GAPstatus <- sub(".*GAP ", "", inputTabAreaGAP$NPCA_Status_GAP_StudyArea)
+inputTabAreaGAP$GAPstatus <- sub(".*?(\\d+)", "\\1", inputTabAreaGAP$NPCA_Status_GAP_StudyArea)
 inputTabAreaGAP$GAPstatus <- as.integer(substring(inputTabAreaGAP$GAPstatus, 1, 1))
 
 # this enables verification of Naturalness in a later step
@@ -127,7 +128,10 @@ inputTabAreaManaged$Managed <- gsub("^(.*?),.*", "\\1", inputTabAreaManaged$NPCA
 
 ## split out Manager Name
 inputTabAreaManaged$Mang_Name <- "NA"
-inputTabAreaManaged$Mang_Name <- sub(".*-(.*)-.*", "\\1",inputTabAreaManaged$NPCA_Status_Mang_StudyArea)
+#inputTabAreaManaged$Mang_Name <- sub("\\).*", ")",inputTabAreaManaged$NPCA_Status_Mang_StudyArea)
+inputTabAreaManaged$Mang_Name <- sub(".*?-", "",inputTabAreaManaged$NPCA_Status_Mang_StudyArea)
+inputTabAreaManaged$Mang_Name <- sub(",.*", "",inputTabAreaManaged$Mang_Name)
+inputTabAreaManaged$Mang_Name <- sub("\\(.*", "",inputTabAreaManaged$Mang_Name)
 inputTabAreaManaged$Mang_Name <- trimws(inputTabAreaManaged$Mang_Name)
 
 # this enables verification of Naturalness in a later step

@@ -24,29 +24,47 @@ print ("Workspaces and Environments set")
 arcpy.env.workspace = inWS_StudyAreas
 StudyAreas = arcpy.ListFeatureClasses()
 
-### Loop through Focal Area shapefiles to be used as mask ###
-for StudyArea in StudyAreas:
-    StudyArea_file = inWS_StudyAreas + "\\" + StudyArea
-    StudyArea_name = str(StudyArea)[:-4]
-    print(StudyArea_name)
+## For just updating Georgia River System boundaries
+print("Working on Georgia River System")
+StudyArea_file = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\StudyAreas_split\GeorgiaRiverSystem.shp"
 
-    ### List rasters ###
-    arcpy.env.workspace = inWS_rasters
-    rasters = arcpy.ListRasters()
+### List rasters ###
+arcpy.env.workspace = inWS_rasters
+rasters = arcpy.ListRasters()
 
-    ### Loop through raster variables
-    for raster in rasters:
-        raster_file = inWS_rasters + "\\" + raster
-        raster_name = raster.split('_')[0]
-        print(raster_name)
+for raster in rasters:
+    raster_file = inWS_rasters + "\\" + raster
+    raster_name = raster.split('_')[0]
+    print(raster_name)
 
-        # Extract raster variable to focal area
-        outExtractByMask = ExtractByMask(raster_file, StudyArea_file)
-        outRaster = outWS + "\\" + StudyArea_name + "_" + raster_name + ".tif"
-        outExtractByMask.save(outRaster)
+    # Extract raster variable to focal area
+    outExtractByMask = ExtractByMask(raster_file, StudyArea_file)
+    outRaster = outWS + "\\" + "GeorgiaRiverSystem_" + raster_name + ".tif"
+    outExtractByMask.save(outRaster)
 
-    # Reset workspace to focal area shapefiles
-    arcpy.env.workspace = inWS_StudyAreas
+##### Loop through Focal Area shapefiles to be used as mask ###
+##for StudyArea in StudyAreas:
+##    StudyArea_file = inWS_StudyAreas + "\\" + StudyArea
+##    StudyArea_name = str(StudyArea)[:-4]
+##    print(StudyArea_name)
+##
+##    ### List rasters ###
+##    arcpy.env.workspace = inWS_rasters
+##    rasters = arcpy.ListRasters()
+##
+##    ### Loop through raster variables
+##    for raster in rasters:
+##        raster_file = inWS_rasters + "\\" + raster
+##        raster_name = raster.split('_')[0]
+##        print(raster_name)
+##
+##        # Extract raster variable to focal area
+##        outExtractByMask = ExtractByMask(raster_file, StudyArea_file)
+##        outRaster = outWS + "\\" + StudyArea_name + "_" + raster_name + ".tif"
+##        outExtractByMask.save(outRaster)
+##
+##    # Reset workspace to focal area shapefiles
+##    arcpy.env.workspace = inWS_StudyAreas
 
 
 print ("Script Finished")

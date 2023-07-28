@@ -34,7 +34,7 @@ library(stringr)
 overwrite=TRUE
 
 ##Load conservation value raster layer
-conservationvalue.raster<-raster::raster("S:/Projects/NPCA/Data/Intermediate/ConservationValue/ConVal_SApp_V2.tif")
+conservationvalue.raster<-raster::raster("S:/Projects/NPCA/Data/Intermediate/ConservationValue/ConVal_BearCoast_lookupv2.tif")
 
 ##create a percentile raster for CONUS
 conservationvalue.percentile<-quantile(conservationvalue.raster, probs=thresholds)

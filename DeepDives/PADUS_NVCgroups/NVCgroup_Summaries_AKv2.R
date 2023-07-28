@@ -86,7 +86,7 @@ for(i in 1:length(lstStudyAreas)){
       group_by(IVC_NAME) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>5),]
+    StudyAreaGroup_subset3 <- StudyAreaGroup_subset3[which(StudyAreaGroup_subset3$TotalPosPercent>10),]
     
     StudyAreaGroup_subset3$axislable <- paste0(StudyAreaGroup_subset3$IVC_NAME) 
     StudyAreaGroup_subset3$GAPstatus_fin <- paste0("GAP",StudyAreaGroup_subset3$GAPstatus)
@@ -94,7 +94,7 @@ for(i in 1:length(lstStudyAreas)){
     StudyAreaGroup_subset3$GAPstatus_fin <- factor(StudyAreaGroup_subset3$GAPstatus_fin, levels = c("Unprotected","GAP4","GAP3","GAP2","GAP1"))
     
     
-    StudyAreaGroup_subset3 %>%
+    p <- StudyAreaGroup_subset3 %>%
       ggplot(aes(x = reorder(axislable, TotalPosPercent),
                  y = PercentArea2,
                  fill = GAPstatus_fin)) +
@@ -112,7 +112,7 @@ for(i in 1:length(lstStudyAreas)){
             plot.title.position = "plot")
   }
 }
-
+ggsave(paste0("NVCgroups_GAPsts.png"), plot = p, bg = "transparent",dpi = 300)
 #-----------------------------------------------------------------------
 ### Repeat the above steps for results summarized by Manager Name
 

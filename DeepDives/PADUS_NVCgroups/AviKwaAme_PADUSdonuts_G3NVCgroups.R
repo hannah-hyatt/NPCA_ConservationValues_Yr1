@@ -34,7 +34,7 @@ StudyArea_subset2$GAPstatus <- factor(StudyArea_subset2$GAPstatus, levels = c("U
 StudyArea_subset2$ymax = cumsum(StudyArea_subset2$PercentArea) #sets top of rectangle for ggplot
 StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom of rectange for ggplot
 
-StudyArea_subset2 %>%
+p <- StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = GAPstatus))+
   geom_rect()+
   ggtitle("Vulnerable NVC Groups") +
@@ -43,3 +43,5 @@ StudyArea_subset2 %>%
   theme_void()+ #punches hole in donut
   theme(legend.position = "bottom", legend.title = element_blank(),plot.title.position = "plot")+
   xlim(1,4) #sets width of donut
+
+ggsave(paste0("StudyArea_Mangsts.png"), plot = p, bg = "transparent",dpi = 300)

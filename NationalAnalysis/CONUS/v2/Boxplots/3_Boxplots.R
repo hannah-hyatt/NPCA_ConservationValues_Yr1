@@ -92,6 +92,18 @@ CONUS.ConservationValues.median <- raster::boxplot(CONUS.raster.list$Conservatio
 # --- Variable Ranges --- #
 # ----------------------- #
 
+# ### Updating just Georgia River System ###
+# ## Min ##
+# RSR.Min <- min(summary(FocalArea.raster.list$GeorgiaRiverSystem_RSR.tif$GeorgiaRiverSystem_RSR)[[1]])
+# Resilience.Min <- min(summary(FocalArea.raster.list$GeorgiaRiverSystem_Resilience.tif$GeorgiaRiverSystem_Resilience)[[1]])
+# ConnectivityClimateFlow.Min <- min(summary(FocalArea.raster.list$GeorgiaRiverSystem_ConnectivityClimateFlow.tif$GeorgiaRiverSystem_ConnectivityClimateFlow)[[1]])
+# ConservationValues.Min <- min(summary(FocalArea.raster.list$GeorgiaRiverSystem_ConservationValues.tif$GeorgiaRiverSystem_ConservationValues)[[1]])
+# ## Max ##
+# RSR.Max <- max(summary(FocalArea.raster.list$GeorgiaRiverSystem_RSR.tif$GeorgiaRiverSystem_RSR)[[5]])
+# Resilience.Max <- max(summary(FocalArea.raster.list$GeorgiaRiverSystem_Resilience.tif$GeorgiaRiverSystem_Resilience)[[5]])
+# ConnectivityClimateFlow.Max <- max(summary(FocalArea.raster.list$GeorgiaRiverSystem_ConnectivityClimateFlow.tif$GeorgiaRiverSystem_ConnectivityClimateFlow)[[5]])
+# ConservationValues.Max <- max(summary(FocalArea.raster.list$GeorgiaRiverSystem_ConservationValues.tif$GeorgiaRiverSystem_ConservationValues)[[5]])
+
 ### Min ###
 RSR.Min <- min(summary(FocalArea.raster.list$AlabamaRiver_RSR.tif$AlabamaRiver_RSR)[[1]],
                     summary(FocalArea.raster.list$AviKwaAme_RSR.tif$AviKwaAme_RSR)[[1]],
@@ -245,6 +257,10 @@ RSR.Max
 Resilience.Max
 ConnectivityClimateFlow.Max
 ConservationValues.Max
+RSR.Min
+Resilience.Min
+ConnectivityClimateFlow.Min
+ConservationValues.Min
 
 #######################
 ### Create Boxplots ###

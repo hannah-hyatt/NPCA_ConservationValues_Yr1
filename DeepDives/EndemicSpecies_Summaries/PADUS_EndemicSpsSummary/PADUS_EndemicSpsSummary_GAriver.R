@@ -58,7 +58,7 @@ for(i in 1:length(lstStudyAreas)){
   lstSpecies_subset <- unique(StudyArea_subset$Scientific_Name)
   
   ## Select a subset of the species - simplifies the bar chart output for presentation 
-  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific"] )
+  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific_Name"] )
   
   # create an empty data frame
   StudyAreaSpecies_subsetComb <- inputTabAreaGAP[0,]
@@ -83,9 +83,9 @@ for(i in 1:length(lstStudyAreas)){
     
     StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset2 %>%
       group_by(Scientific_Name) %>%
-      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>10]))
+      mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>0),]
+    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>99),]
 
     StudyAreaSpecies_subset3$axislable <- paste0(StudyAreaSpecies_subset3$Scientific_Name, " (", StudyAreaSpecies_subset3$Rounded_GRank, ")") 
     StudyAreaSpecies_subset3$GAPstatus_fin <- paste0("GAP",StudyAreaSpecies_subset3$GAPstatus_fin)

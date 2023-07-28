@@ -77,13 +77,13 @@ for(i in 1:length(lstStudyAreas)){
       group_by(Scientific) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>5),]
+    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>8),]
 
     StudyAreaSpecies_subset3$axislable <- paste0(StudyAreaSpecies_subset3$Scientific, " (", StudyAreaSpecies_subset3$Grank, ")") 
     StudyAreaSpecies_subset3$GAPstatus_fin <- paste0("GAP",StudyAreaSpecies_subset3$GAPstatus_fin)
     StudyAreaSpecies_subset3$GAPstatus_fin <- trimws(StudyAreaSpecies_subset3$GAPstatus_fin)
     StudyAreaSpecies_subset3$GAPstatus_fin <- factor(StudyAreaSpecies_subset3$GAPstatus_fin, levels = c("GAPUnprotected","GAP 4","GAP 3","GAP 2","GAP 1"))
-
+    
     StudyAreaSpecies_subset3 %>%
       ggplot(aes(x = reorder(axislable, TotalPosPercent),
                  y = PercentArea2,

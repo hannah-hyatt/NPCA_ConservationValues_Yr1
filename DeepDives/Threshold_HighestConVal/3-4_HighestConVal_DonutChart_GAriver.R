@@ -8,15 +8,15 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/DelawareRiverLandscapeDeepDive.gdb/TabArea_SAconval_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/BearCoastDeepDive.gdb/TabArea_SAconval_GAPstatus" # UPDATE Input Tabulate Area table - Managed Lands or GAP status focused
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
 inputTabAreaGAP$OBJECTID <- NULL
 
-CutecodeCrosswalk <- read.csv("S:/Projects/_Workspaces/Hannah_Hyatt/MoBI_Gov_Relations/SpeciesLists/CuteCodeCrosswalk.csv")
-CutecodeCrosswalk <- as.data.frame(CutecodeCrosswalk)
+#CutecodeCrosswalk <- read.csv("S:/Projects/_Workspaces/Hannah_Hyatt/MoBI_Gov_Relations/SpeciesLists/CuteCodeCrosswalk.csv")
+#CutecodeCrosswalk <- as.data.frame(CutecodeCrosswalk)
 
 # Create Gap Status field
 inputTabAreaGAP$GAPstatus <- paste0("GAP",inputTabAreaGAP$GAP_Sts)
@@ -38,7 +38,7 @@ StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom o
 StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = GAPstatus))+
   geom_rect()+
-  ggtitle("Delaware River Basin") +
+  ggtitle("Bear Coast") +
   coord_polar(theta = "y")+ #makes plot circular
   scale_fill_manual(values=c("#b1b1b1","#bed5cf","#659fb5","#869447","#27613b"))+
   theme_void()+ #punches hole in donut
@@ -52,7 +52,7 @@ StudyArea_subset2 %>%
 ## Donut charts based on PADUS Management fields - simplified 
 
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/DelawareRiverLandscapeDeepDive.gdb/TabArea_SAconval_ManagedLands"
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/BearCoastDeepDive.gdb/TabArea_SAconval_ManagedLands"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -84,7 +84,7 @@ StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom o
 StudyArea_subset2 %>%
   ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = Mang_NS))+
   geom_rect()+
-  ggtitle("Delaware River Basin") +
+  ggtitle("Bear Coast") +
   coord_polar(theta = "y")+ #makes plot circular
   #scale_y_reverse()+
   scale_fill_manual(values=c("Unmanaged" = "#B1B1B1",

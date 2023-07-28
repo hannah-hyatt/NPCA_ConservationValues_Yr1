@@ -50,6 +50,7 @@ for(i in 1:length(lstStudyAreas)){
     xlim(1,4) #sets width of donut
   #facet_wrap(vars(), ncol=8) 
 }
+ggsave(paste0("StudyArea_GAPsts_BearCoast.png"), plot = p, bg = "transparent",dpi = 300)
 
 
 ##----------------------------------------------------------------------------------------------------------------------
@@ -114,3 +115,4 @@ for(i in 1:length(lstStudyAreas)){
     theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
     xlim(1,4) #sets width of donut
 }
+ggsave(paste0("StudyArea_GAPsts_BearCoast.png"), plot = p, bg = "transparent",dpi = 300)

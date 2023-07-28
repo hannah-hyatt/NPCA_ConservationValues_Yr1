@@ -8,15 +8,15 @@ library(arcgisbinding)
 arc.check_product()
 options(scipen=999) # don't use scientific notation
 
-inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_GAP_xStudyAreas_CONUS"
+inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_GAP_xStudyAreasV2"
 inputTabAreaGAP <- arc.open(inputTabAreaGAP)
 inputTabAreaGAP <- arc.select(inputTabAreaGAP)
 inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
-#inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_akaGAPsts_wNatMon"
-#inputTabAreaGAP <- arc.open(inputTabAreaGAP)
-#inputTabAreaGAP <- arc.select(inputTabAreaGAP)
-#inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
+# inputTabAreaGAP <- "S:/Projects/NPCA/Data/Intermediate/AviKwaAmeDeepDive.gdb/TabArea_akaGAPsts_wNatMon"
+# inputTabAreaGAP <- arc.open(inputTabAreaGAP)
+# inputTabAreaGAP <- arc.select(inputTabAreaGAP)
+# inputTabAreaGAP <- as.data.frame(inputTabAreaGAP)
 
 inputTabAreaGAP$OBJECTID <- NULL
 
@@ -44,7 +44,7 @@ for(i in 1:length(lstStudyAreas)){
   StudyArea_subset2$ymax = cumsum(StudyArea_subset2$PercentArea) #sets top of rectangle for ggplot
   StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom of rectange for ggplot
   
-  p <- StudyArea_subset2 %>%
+  StudyArea_subset2 %>%
     ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = GAPstatus))+
     geom_rect()+
     ggtitle(paste(lstStudyAreas[i],"Study Area")) +
@@ -55,12 +55,12 @@ for(i in 1:length(lstStudyAreas)){
     xlim(1,4) #sets width of donut
   #facet_wrap(vars(), ncol=8) 
 }
-ggsave(paste0("StudyArea_GAPsts_DEriver.png"), plot = p, bg = "transparent",dpi = 300)
+ggsave(paste0("StudyArea_GAPsts_GAriver.png"), plot = p, bg = "transparent",dpi = 300)
 ##----------------------------------------------------------------------------------------------------------------------
 ## Donut charts based on PADUS Management fields - simplified 
 
 
-inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_MangNS_xStudyAreas_CONUS"
+inputTabAreaManaged <- "S:/Projects/NPCA/Data/Intermediate/GAP_Analysis.gdb/TabArea_MangNS_xStudyAreasV2"
 inputTabAreaManaged <- arc.open(inputTabAreaManaged)
 inputTabAreaManaged <- arc.select(inputTabAreaManaged)
 inputTabAreaManaged <- as.data.frame(inputTabAreaManaged)
@@ -114,7 +114,7 @@ for(i in 1:length(lstStudyAreas)){
                                "USFS" = "#1F601A", 
                                "NPS" = "#3BB432"))+
     theme_void()+ #punches hole in donut
-    theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
+    theme(legend.position = "bottom", legend.title = element_blank(),plot.title.position = "plot")+
     xlim(1,4) #sets width of donut
 }
 ggsave(paste0("StudyArea_Mangsts.png"), plot = p, bg = "transparent",dpi = 300)
