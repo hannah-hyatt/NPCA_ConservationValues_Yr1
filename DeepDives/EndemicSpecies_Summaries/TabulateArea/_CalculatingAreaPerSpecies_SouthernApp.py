@@ -27,8 +27,8 @@ env.workspace = WS
 arcpy.env.overwriteOutput = True
 
 # Set Variables
-Boundary = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\PADUS_AKA_ProposedNatMon_AnalysisLayer" # UPDATE
-tablepath = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\SpeciesSummaries\Int_ModelTbls_SouthernApp" # UPDATE
+Boundary = r"S:\Projects\NPCA\Data\Intermediate\GAP_Analysis.gdb\StudyAreas_PADUS_CONUS_AnalysisLayerV2" # UPDATE
+tablepath = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\SpeciesSummaries\Int_ModelsTbls_SouthernApp" # UPDATE
 outTable = r"MoBIshms_TabAreaMerge_Sapp" # UPDATE
 Boundary_field = "NPCA_Status_GAP_StudyArea" # UPDATE
 print("variables and environments set")
@@ -56,6 +56,7 @@ for i in range(len(cutecodelist)):
         SpeciesRaster = srpath + rastername
 
         # Calculate area in meters squared
+        print("working on " + cutecode)
         area_dbf = tablepath + "\\" + cutecode + "_areatable.dbf"
         TabulateArea(Boundary, Boundary_field, SpeciesRaster, "Value", area_dbf, SpeciesRaster)
 
@@ -74,10 +75,6 @@ env.workspace = tablepath
 listTable = arcpy.ListTables()
 Areas_merged = outTable
 arcpy.Merge_management(listTable, Areas_merged)
-print("merge complete")
 
-# join species information
-cutecode_crosswalk = r"S:\Projects\_Workspaces\Hannah_Hyatt\MoBI_Gov_Relations\SpeciesLists\CuteCodeCrosswalk.csv"
-arcpy.management.JoinField(Areas_merged, "cutecode", cutecode_crosswalk, "cutecode", "Scientific_Name;Common_Name;Rounded_GRank;ESA_Status")
 print("Script complete")
 

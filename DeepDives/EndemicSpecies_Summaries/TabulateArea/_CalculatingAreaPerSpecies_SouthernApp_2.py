@@ -27,19 +27,17 @@ env.workspace = WS
 arcpy.env.overwriteOutput = True
 
 # Set Variables
-Boundary = r"S:\Projects\NPCA\Data\Intermediate\AviKwaAmeDeepDive.gdb\PADUS_AKA_ProposedNatMon_AnalysisLayer" # UPDATE
-tablepath = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\SpeciesSummaries\Int_ModelTbls_SouthernApp" # UPDATE
-outTable = r"MoBIshms_TabAreaMerge_Sapp" # UPDATE
-Boundary_field = "NPCA_Status_GAP_StudyArea" # UPDATE
-print("variables and environments set")
+Boundary = r"S:\Projects\NPCA\Data\Intermediate\GAP_Analysis.gdb\StudyAreas_PADUS_CONUS_AnalysisLayerV2" # UPDATE
+tablepath = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\SpeciesSummaries\Int_ModelsTbls_SouthernApp" # UPDATE
+outTable = r"MoBIshms_TabAreaMerge_Sapp_Management" # UPDATE
+Boundary_field = "NPCA_Status_Mang_StudyArea" # UPDATE
 
 # Create Cutecode List
 cutecodelist = []
-cutecode_file = open(r'S:\Projects\NPCA\Data\SpeciesLists\hypergrid_spslist\SouthernAppalachian_SpeciesList.txt', 'r') # UPDATE IF NEEDED
+cutecode_file = open(r'S:\Projects\NPCA\Data\SpeciesLists\hypergrid_spslist\TellicoSalamander.txt', 'r') # UPDATE IF NEEDED
 for word in cutecode_file:
     word = word.rstrip("\n") # this removes the spaces after each word
     cutecodelist.append(word)
-print ("cutecode list created")
 
 # Loop through cutecodes to get rasters and calculate area
 i = 1

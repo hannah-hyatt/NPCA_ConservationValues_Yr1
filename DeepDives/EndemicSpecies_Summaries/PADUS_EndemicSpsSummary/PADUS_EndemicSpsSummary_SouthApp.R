@@ -51,7 +51,10 @@ for(i in 1:length(lstStudyAreas)){
   #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Imperiled=="Imperiled"),"Scientific_Name"] )
   
   ## Select a subset of the species - simplifies the bar chart output for presentation 
-  lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific_Name"] )
+  #lstSpecies_subset <- unique(StudyArea_subset[which(StudyArea_subset$Highlight_sps=="TRUE"),"Scientific_Name"] )
+  
+  ## Select all species
+  lstSpecies_subset <- unique(StudyArea_subset$Scientific_Name)
   
   # create an empty data frame
   StudyAreaSpecies_subsetComb <- inputTabAreaGAP[0,]
@@ -78,12 +81,12 @@ for(i in 1:length(lstStudyAreas)){
       group_by(Scientific_Name) %>%
       mutate(TotalPosPercent =sum(PercentArea2[PercentArea2>0]))
     
-    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>0),]
+    StudyAreaSpecies_subset3 <- StudyAreaSpecies_subset3[which(StudyAreaSpecies_subset3$TotalPosPercent>99.9),]
 
     StudyAreaSpecies_subset3$axislable <- paste0(StudyAreaSpecies_subset3$Scientific_Name, " (", StudyAreaSpecies_subset3$Rounded_GRank, ")") 
     StudyAreaSpecies_subset3$GAPstatus_fin <- paste0("GAP",StudyAreaSpecies_subset3$GAPstatus_fin)
     StudyAreaSpecies_subset3$GAPstatus_fin <- factor(StudyAreaSpecies_subset3$GAPstatus_fin, levels = c("GAPNA","GAP4","GAP3","GAP2","GAP1"))
-
+    
     StudyAreaSpecies_subset3 %>%
       ggplot(aes(x = reorder(axislable, TotalPosPercent),
                  y = PercentArea2,
@@ -103,6 +106,10 @@ for(i in 1:length(lstStudyAreas)){
   }
   }
 #ggsave(paste0("EndSpsSumm", i,".png"), plot = p, bg = "transparent",dpi = 300)
+
+endemics <- unique(StudyAreaSpecies_subset3$Scientific_Name) %>% as.data.frame()
+write.csv(endemics, "S:/Projects/NPCA/Data/SpeciesLists/hypergrid_spslist/SouthernAppalachians_Endemics.csv")
+
 write.csv(StudyAreaSpecies_subset3, "S:/Projects/NPCA/MapExports/Draft/EsriMapGallery/Data/BarChart_EndemicSps_SouthernApp.csv")
 #------------------------------------------------------------------------------------------------------------------------
 # repeat above analysis for management type

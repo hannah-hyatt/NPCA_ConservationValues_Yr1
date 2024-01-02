@@ -56,6 +56,7 @@ for(i in 1:length(lstStudyAreas)){
   #facet_wrap(vars(), ncol=8) 
 }
 ggsave(paste0("StudyArea_GAPsts_GAriver.png"), plot = p, bg = "transparent",dpi = 300)
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/AAGpublication/GAPsts_SouthernApp.csv")
 ##----------------------------------------------------------------------------------------------------------------------
 ## Donut charts based on PADUS Management fields - simplified 
 
@@ -118,3 +119,4 @@ for(i in 1:length(lstStudyAreas)){
     xlim(1,4) #sets width of donut
 }
 ggsave(paste0("StudyArea_Mangsts.png"), plot = p, bg = "transparent",dpi = 300)
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/AAGpublication/Managersts_SouthernApp.csv")
