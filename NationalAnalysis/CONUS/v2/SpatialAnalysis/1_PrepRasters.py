@@ -19,9 +19,9 @@ print(now)
 
 ### Set Variables ###
 ResilientSites = arcpy.Raster(r"S:\Data\External\Evaluation\TNC_ResilientConnectedLandscapes\y2023_triballands\resilience_internal_2021_11\resilience_internal\Resilience_Internal.gdb\resilience_score")
-ConnectivityClimateFlow = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\Connectivity_and_Climate_Flow_Raw\Connectivity_and_Climate_Flow_Raw.gdb\Climate_Flow_W2W")
-RSR = arcpy.Raster(r"S:\Data\NatureServe\Species_Distributions\MoBI_HabitatModels\April2021\RSR_All.tif")
-outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs"
+ConnectivityClimateFlow = arcpy.Raster(r"S:\Projects\NPCA\Data\Source\Unzipped\TNC\Connectivity_and_Climate_Flow_Raw\Connectivity_and_Climate_Flow_Raw.gdb\Climate_Flow_W2W") # UPDATE - in Data/external path Climateflow w2w layer c_flow_w2w
+RSR = arcpy.Raster(r"S:\Data\NatureServe\Species_Distributions\MoBI_HabitatModels\April2021\RSR_All.tif") # UPDATE to new MOBI
+outWS = r"S:\Projects\NPCA\Workspace\Hannah_Hyatt\NationalAnalysis\CONUS\1_DecileCalculationInputs" #UPDATE to new location
 
 ### Set Environments ###
 arcpy.env.overwriteOutput = True
