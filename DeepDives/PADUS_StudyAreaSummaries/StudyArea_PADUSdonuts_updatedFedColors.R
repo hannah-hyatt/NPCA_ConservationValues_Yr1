@@ -55,9 +55,8 @@ for(i in 1:length(lstStudyAreas)){
     xlim(1,4) #sets width of donut
   #facet_wrap(vars(), ncol=8) 
 }
-plot(p)
-ggsave(paste0("StudyArea_GAPsts_NorthCascades.png"), plot = p, bg = "transparent",dpi = 300)
-write.csv(StudyArea_subset2, "S:/Projects/NPCA/_Year2/Data/Intermediate/GreaterEverglades/GreaterEverglades_GAPsts.csv")
+ggsave(paste0("StudyArea_GAPsts_Everglades.png"), plot = p, bg = "transparent",dpi = 300)
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/AAGpublication/GAPsts_SouthernApp.csv")
 ##----------------------------------------------------------------------------------------------------------------------
 ## Donut charts based on PADUS Management fields - simplified 
 
@@ -95,30 +94,29 @@ for(i in 1:length(lstStudyAreas)){
   StudyArea_subset2$ymax = cumsum(StudyArea_subset2$PercentArea) #sets top of rectangle for ggplot
   StudyArea_subset2$ymin = c(0, head(StudyArea_subset2$ymax, n=-1)) #sets bottom of rectange for ggplot
   
-  p <- StudyArea_subset2 %>%
+  StudyArea_subset2 %>%
     ggplot (aes(x=2, ymax=ymax,ymin=ymin, xmax=4, xmin=3, fill = Mang_NS))+
     geom_rect()+
     ggtitle(paste(lstStudyAreas[i],"Study Area")) +
     coord_polar(theta = "y")+ #makes plot circular
     scale_y_reverse()+
-    scale_fill_manual(values=c("Unmanaged" = "#B1B1B1",
+    scale_fill_manual(values=c("Unmanaged" = "#CCCCCC",
                                "UNK" = "#7F7F7F", 
                                "PVT" = "#6a3d9a", 
-                               "TRIB" = "#b15928", 
-                               "STAT" = "#ffff99", 
-                               "LOC" = "#e31a1c", 
+                               "TRIB" = "#FFB380", 
+                               "STAT" = "#B3FFFF", 
+                               "LOC" = "#80CCCC", 
                                "FED" = "#fb9a99",
-                               "DOE" = "#b2df8a",
-                               "DOD" = "#1f78b4", 
+                               "DOE" = "#E6CCB3",
+                               "DOD" = "#FFB3F2", 
                                "NGO" = "#ff7f00", 
-                               "BLM" = "#a6cee3",
-                               "FWS" = "#fdbf6f", 
-                               "USFS" = "#1F601A", 
-                               "NPS" = "#3BB432"))+
+                               "BLM" = "#FFE680",
+                               "FWS" = "#80FFB3", 
+                               "USFS" = "#CCFFCC", 
+                               "NPS" = "#CCCCFF"))+
     theme_void()+ #punches hole in donut
     theme(legend.position = "none", legend.title = element_blank(),plot.title.position = "plot")+
     xlim(1,4) #sets width of donut
 }
-plot(p)
 ggsave(paste0("StudyArea_Mangsts_NorthCascades.png"), plot = p, bg = "transparent",dpi = 300)
 write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/AAGpublication/Managersts_SouthernApp.csv")
