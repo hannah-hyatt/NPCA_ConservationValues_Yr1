@@ -17,7 +17,7 @@ library(tidyverse)
 ######################
 CONUS.inWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/BoxPlots/2_FloatingPoint/"
 FocalArea.inWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/BoxPlots/3_Rasters_extracted_by_FocalAreas/"
-outWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/Boxplots/Boxplots_20230320/"
+outWS <- "S:/Projects/NPCA/Workspace/Hannah_Hyatt/NationalAnalysis/Boxplots/Boxplots_20241226/"
 
 ############################
 ### Import/Clean Rasters ###
@@ -45,17 +45,17 @@ for (CONUS.raster in CONUS.rasters){
 # The richness max value is stated here as 31 rather than 32; however, when calculating the max value across all focal area rasters below it did come to 32 (although this step is for CONUS, so not comparable). Not sure how much to be concerned about this.
 
 ### Check CONUS rasters ###
- plot(CONUS.raster.list$RSR_float.tif$RSR_float)
- summary(CONUS.raster.list$RSR_float.tif$RSR_float)
+plot(CONUS.raster.list$RSR_float.tif$RSR_float)
+summary(CONUS.raster.list$RSR_float.tif$RSR_float)
  
- plot(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
- summary(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
+plot(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
+summary(CONUS.raster.list$ConnectivityClimateFlow_float.tif$ConnectivityClimateFlow_float)
  
- plot(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
- summary(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
+plot(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
+summary(CONUS.raster.list$ConservationValues_float.tif$ConservationValues_float)
  
- plot(CONUS.raster.list$Resilience_float.tif$Resilience_float)
- summary(CONUS.raster.list$Resilience_float.tif$Resilience_float)
+plot(CONUS.raster.list$Resilience_float.tif$Resilience_float)
+summary(CONUS.raster.list$Resilience_float.tif$Resilience_float)
 
 # ------------------- #
 # --- Focal Areas --- #

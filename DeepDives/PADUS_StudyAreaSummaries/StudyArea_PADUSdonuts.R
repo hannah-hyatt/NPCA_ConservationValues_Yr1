@@ -57,7 +57,7 @@ for(i in 1:length(lstStudyAreas)){
 }
 plot(p)
 ggsave(paste0("StudyArea_GAPsts_NorthCascades.png"), plot = p, bg = "transparent",dpi = 300)
-write.csv(StudyArea_subset2, "S:/Projects/NPCA/_Year2/Data/Intermediate/GreaterEverglades/GreaterEverglades_GAPsts.csv")
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/_Year2/Data/Intermediate/NorthCascades/Tables/NorthCascades_GAPsts.csv")
 ##----------------------------------------------------------------------------------------------------------------------
 ## Donut charts based on PADUS Management fields - simplified 
 
@@ -121,4 +121,4 @@ for(i in 1:length(lstStudyAreas)){
 }
 plot(p)
 ggsave(paste0("StudyArea_Mangsts_NorthCascades.png"), plot = p, bg = "transparent",dpi = 300)
-write.csv(StudyArea_subset2, "S:/Projects/NPCA/MapExports/Draft/AAGpublication/Managersts_SouthernApp.csv")
+write.csv(StudyArea_subset2, "S:/Projects/NPCA/_Year2/Data/Intermediate/NorthCascades/Tables/NorthCascades_MangSts.csv")
